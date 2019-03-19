@@ -249,19 +249,42 @@ int degre_maximal_graphe(pgraphe_t g)
 
 int degre_minimal_graphe(pgraphe_t g)
 {
-	/*
-    Min des degres des noeuds du graphe g
-  */
+	pnoeud_t p = g;
+	int min = 999, tmp;
+	
+	while(p != NULL)
+	{
+		tmp = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
+		if(tmp > min){
+			min = tmp;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return min;
 
 	return 0;
 }
 
-int independant(pgraphe_t g)
+	
+int independant(pgraphe_t g)	//On compte le nombre de noeuds avec un seul arc. Jsp si c'est ca.
 {
 	/* Les aretes du graphe n'ont pas de sommet en commun */
+	pnoeud_t p = g;
+	int tmp, taille = 0;
+	
+	while(p != NULL)
+	{
+		tmp = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
+		if(tmp == 1){
+			taille++;
+		}
+		p = p->noeud_suivant;
+	}
 
-	return 0;
+	return taille;
 }
+
 
 int complet(pgraphe_t g)
 {
