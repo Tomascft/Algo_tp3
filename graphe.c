@@ -149,7 +149,7 @@ void ecrire_graphe(pnoeud_t p)
 
 // ===================================================================
 
-int nombre_arcs(pgraphe_t g) 
+int nombre_arcs(pgraphe_t g)
 {
 	pnoeud_t p = g;
 	int taille = 0;
@@ -157,10 +157,11 @@ int nombre_arcs(pgraphe_t g)
 	while (p != NULL)
 	{
 		parc_t a = p->liste_arcs;
-		while(a != NULL){
+		while (a != NULL)
+		{
 			taille++;
 			a = a->arc_suivant;
-		} 
+		}
 		p = p->noeud_suivant;
 	}
 	return taille;
@@ -183,11 +184,21 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
 {
 	/*
     Cette fonction retourne le nombre d'arcs sortants 
-    du noeud n dans le graphe g
+    du noeud n dans le graphe g.
   */
- 	pnoeud_t p = g;
 	int degre = 0;
-	return 0;
+	parc_t a = n->liste_arcs;
+
+	while (a != NULL)
+	{
+		if (a = existence_arc(a, g))
+		{
+			degre++;
+		}
+		a = a->arc_suivant;
+	}
+
+	return degre;
 }
 
 int degre_entrant_noeud(pgraphe_t g, pnoeud_t n)
