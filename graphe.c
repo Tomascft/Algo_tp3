@@ -191,10 +191,7 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
 
 	while (a != NULL)
 	{
-		if (a = existence_arc(a, g))
-		{
-			degre++;
-		}
+		degre++;
 		a = a->arc_suivant;
 	}
 
@@ -207,8 +204,24 @@ int degre_entrant_noeud(pgraphe_t g, pnoeud_t n)
     Cette fonction retourne le nombre d'arcs entrants 
     dans le noeud n dans le graphe g
   */
+	int degre = 0;
+	pnoeud_t p = g;
 
-	return 0;
+	while (p != NULL)
+	{
+		parc_t a = p->liste_arcs;
+		while (a != NULL)
+		{
+			if (a->noeud == n)
+			{
+				degre++;
+			}
+			a = a->arc_suivant;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return degre;
 }
 
 int degre_maximal_graphe(pgraphe_t g)
