@@ -191,10 +191,10 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
 
 	while (a != NULL)
 	{
-		if (a = existence_arc(a, g))
-		{
+		//if (a == existence_arc(a, g))
+		//{
 			degre++;
-		}
+		//}
 		a = a->arc_suivant;
 	}
 
