@@ -269,7 +269,7 @@ int degre_minimal_graphe(pgraphe_t g)
 	
 int independant(pgraphe_t g)	//On compte le nombre de noeuds avec un seul arc. Jsp si c'est ca.
 {
-	/* Les aretes du graphe n'ont pas de sommet en commun */
+	/* Les aretes du graphe n'ont pas de sommet en commun On verra plus tard ce qu'il faut faire*/
 	pnoeud_t p = g;
 	int tmp, taille = 0;
 	
