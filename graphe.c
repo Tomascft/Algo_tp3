@@ -1,7 +1,7 @@
 /*
   Structures de type graphe
   Structures de donnees de type liste
-  (Pas de contrainte sur le nombre de noeuds des  graphes)
+  (Pas de contrainte sur le nombre de noeuds des  graphes)zdzdz
 */
 
 
