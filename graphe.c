@@ -149,24 +149,25 @@ void ecrire_graphe(pnoeud_t p)
 
 // ===================================================================
 
-int nombre_arcs(pgraphe_t g) //Pas sur que ca marche
+int nombre_arcs(pgraphe_t g) 
 {
-	parc_t a = g->liste_arcs;
+	pnoeud_t p = g;
 	int taille = 0;
 
-	while (a != NULL)
+	while (p != NULL)
 	{
-		a = a->arc_suivant;
-		taille++;
+		parc_t a = p->liste_arcs;
+		while(a != NULL){
+			taille++;
+			a = a->arc_suivant;
+		} 
+		p = p->noeud_suivant;
 	}
 	return taille;
 }
 
 int nombre_sommets(pgraphe_t g)
 {
-	/*
-    cette fonction renvoie le nombre de noeuds du graphe g
- */
 	pnoeud_t p = g;
 	int taille = 0;
 
