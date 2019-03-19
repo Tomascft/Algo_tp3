@@ -232,8 +232,19 @@ int degre_maximal_graphe(pgraphe_t g)
 	/*
     Max des degres des noeuds du graphe g
   */
+	pnoeud_t p = g;
+	int max = 0, tmp;
+	
+	while(p != NULL)
+	{
+		tmp = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
+		if(tmp > max){
+			max = tmp;
+		}
+		p = p->noeud_suivant;
+	}
 
-	return 0;
+	return max;
 }
 
 int degre_minimal_graphe(pgraphe_t g)
