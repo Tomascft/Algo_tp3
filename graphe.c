@@ -193,7 +193,7 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
 	{
 		//if (a == existence_arc(a, g))
 		//{
-			degre++;
+		degre++;
 		//}
 		a = a->arc_suivant;
 	}
@@ -234,11 +234,12 @@ int degre_maximal_graphe(pgraphe_t g)
   */
 	pnoeud_t p = g;
 	int max = 0, tmp;
-	
-	while(p != NULL)
+
+	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
-		if(tmp > max){
+		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
+		if (tmp > max)
+		{
 			max = tmp;
 		}
 		p = p->noeud_suivant;
@@ -251,11 +252,12 @@ int degre_minimal_graphe(pgraphe_t g)
 {
 	pnoeud_t p = g;
 	int min = 999, tmp;
-	
-	while(p != NULL)
+
+	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
-		if(tmp > min){
+		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
+		if (tmp > min)
+		{
 			min = tmp;
 		}
 		p = p->noeud_suivant;
@@ -266,17 +268,17 @@ int degre_minimal_graphe(pgraphe_t g)
 	return 0;
 }
 
-	
-int independant(pgraphe_t g)	//On compte le nombre de noeuds avec un seul arc. Jsp si c'est ca.
+int independant(pgraphe_t g) //On compte le nombre de noeuds avec un seul arc. Jsp si c'est ca.
 {
-	/* Les aretes du graphe n'ont pas de sommet en commun On verra plus tard ce qu'il faut faire*/
+	/* Les aretes du graphe n'ont pas de sommet en commun. On verra plus tard ce qu'il faut faire*/
 	pnoeud_t p = g;
 	int tmp, taille = 0;
-	
-	while(p != NULL)
+
+	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
-		if(tmp == 1){
+		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
+		if (tmp == 1)
+		{
 			taille++;
 		}
 		p = p->noeud_suivant;
@@ -285,12 +287,38 @@ int independant(pgraphe_t g)	//On compte le nombre de noeuds avec un seul arc. J
 	return taille;
 }
 
-
 int complet(pgraphe_t g)
 {
 	/* Toutes les paires de sommet du graphe sont jointes par un arc */
+	pnoeud_t p = g;
+	int taille = nombre_sommets(g);
+	int tab[taille];
 
-	return 0;
+	for (int i = 0; i < taille; i++)
+	{
+		tab[i] = 0;
+	}
+
+	while (p != NULL)
+	{
+		parc_t a = p->liste_arcs;
+		while (a != NULL)
+		{
+			tab[a->noeud->label] = 1;
+			a = a->arc_suivant;
+		}
+		for (int i = 0; i < taille; i++)
+		{
+			if (tab[i] == 0)
+			{
+				return 0;
+			}
+			tab[i] = 0;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return 1;
 }
 
 int regulier(pgraphe_t g)
@@ -333,7 +361,7 @@ void afficher_graphe_largeur(pgraphe_t g)
 }
 
 int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
-					  int *nb_noeuds)
+											int *nb_noeuds)
 {
 	/* 
      Calcul de la longueur du plus court chemin
