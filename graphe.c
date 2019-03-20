@@ -328,8 +328,19 @@ int regulier(pgraphe_t g)
      g est le ponteur vers le premier noeud du graphe
      renvoie 1 si le graphe est régulier, 0 sinon
   */
+	pnoeud_t p = g;
+	int degre = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
+	int tmp;
 
-	return 0;
+	p = p->noeud_suivant;
+	while(p != NULL){
+		if(degre != degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p)){
+			return 0;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return 1;
 }
 
 void afficher_graphe_profondeur(pgraphe_t g)
