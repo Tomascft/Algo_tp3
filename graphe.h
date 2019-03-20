@@ -29,11 +29,24 @@ typedef struct a {
   
 } arc_t, *parc_t ;
 
+
+
+typedef struct c {
+  
+                  int         nb_noeuds; // Taille du chemin
+                  pnoeud_t *  noeud; // identificateur du noeud destinataire
+                  struct c *  chemin_suivant ; // chemin suivant
+  
+} chemin_t, *pchemin_t ;
+
 /*
   pgraphe_t: pointeur vers le premier noeud d'un graphe
 */
 
 typedef pnoeud_t pgraphe_t ;
+
+
+typedef pchemin_t pdeb_chemin_t ;
 
 
 /*
