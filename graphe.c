@@ -329,12 +329,14 @@ int regulier(pgraphe_t g)
      renvoie 1 si le graphe est régulier, 0 sinon
   */
 	pnoeud_t p = g;
-	int degre = degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p);
+	int degre = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
 	int tmp;
 
 	p = p->noeud_suivant;
-	while(p != NULL){
-		if(degre != degre_entrant_noeud(g,p) + degre_sortant_noeud(g,p)){
+	while (p != NULL)
+	{
+		if (degre != degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p))
+		{
 			return 0;
 		}
 		p = p->noeud_suivant;
@@ -381,20 +383,24 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
      nb_noeuds indique le nombre de noeuds du chemin
   */
 
- 	pnoeud_t p = g;
-	pnoeud_t or,dest;
+	pnoeud_t p = g;
+	pnoeud_t or, dest;
 
-	if(origine == destination){
+	if (origine == destination)
+	{
 		*nb_noeuds = 1;
 		chemin[0] = origine;
 		return 1;
 	}
-	
-	while(p != NULL){
-		if(p->label == origine){
+
+	while (p != NULL)
+	{
+		if (p->label == origine)
+		{
 			or = p;
 		}
-		if(p->label == destination){
+		if (p->label == destination)
+		{
 			dest = p;
 		}
 		p = p->noeud_suivant;
@@ -403,6 +409,30 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 	return 0;
 }
 
-/*
-  placer les fonctions de l'examen 2017 juste apres
-*/
+int elementaire(pgraphe_t g, chemin_t c)
+{
+	int taille = nombre_sommets(g);
+	int tab[taille];
+	pchemin_t ch = &c;
+
+	for(int i = 0; i < taille; i++){
+		tab[i] = 0;
+	}
+
+	while (ch != NULL)
+	{
+		if(tab[ch->noeud->label] == 1){
+			return 0;
+		}
+		tab[ch->noeud->label] = 1;
+	}
+
+	return 1;
+}
+
+int simple(pgraphe_t g, chemin_t c)
+{
+
+
+	return 1;
+}

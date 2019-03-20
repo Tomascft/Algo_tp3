@@ -34,7 +34,8 @@ typedef struct a {
 typedef struct c {
   
                   int         nb_noeuds; // Taille du chemin
-                  pnoeud_t *  noeud; // identificateur du noeud destinataire
+                  pnoeud_t    noeud; // identificateur du noeud
+
                   struct c *  chemin_suivant ; // chemin suivant
   
 } chemin_t, *pchemin_t ;
