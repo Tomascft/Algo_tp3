@@ -381,6 +381,25 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
      nb_noeuds indique le nombre de noeuds du chemin
   */
 
+ 	pnoeud_t p = g;
+	pnoeud_t or,dest;
+
+	if(origine == destination){
+		*nb_noeuds = 1;
+		chemin[0] = origine;
+		return 1;
+	}
+	
+	while(p != NULL){
+		if(p->label == origine){
+			or = p;
+		}
+		if(p->label == destination){
+			dest = p;
+		}
+		p = p->noeud_suivant;
+	}
+
 	return 0;
 }
 
