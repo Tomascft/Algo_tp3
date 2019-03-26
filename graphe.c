@@ -188,9 +188,11 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
     du noeud n dans le graphe g.
   */
 	int degre = 0;
-	pnoeud_t b=g;
-	while(b!=NULL){
-		if(b==n){
+	pnoeud_t b = g;
+	while (b != NULL)
+	{
+		if (b == n)
+		{
 			parc_t a = n->liste_arcs;
 			while (a != NULL)
 			{
@@ -200,11 +202,9 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
 
 			return degre;
 		}
-		b=b->noeud_suivant;
+		b = b->noeud_suivant;
 	}
 	return -1;
-
-	
 }
 
 int degre_entrant_noeud(pgraphe_t g, pnoeud_t n)
@@ -278,15 +278,15 @@ int independant(pgraphe_t g) //On compte le nombre de noeuds avec un seul arc. J
 
 	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
-		if (tmp == 1)
+		tmp = degre_entrant_noeud(g, p);
+		if (tmp > 1)
 		{
-			taille++;
+			return 1;
 		}
 		p = p->noeud_suivant;
 	}
 
-	return taille;
+	return 0;
 }
 
 int complet(pgraphe_t g)
@@ -352,8 +352,21 @@ void afficher_graphe_profondeur(pgraphe_t g)
 	/*
     afficher les noeuds du graphe avec un parcours en profondeur
   */
+	pnoeud_t p = g;
 
-	return;
+	while (p != NULL)
+	{
+
+		printf("Noeud %d: ", p->label);
+		parc_t arc = p->liste_arcs;
+		while (arc != NULL)
+		{
+			printf(" (%d %d) ", arc->noeud->label, arc->poids);
+			arc = arc->arc_suivant;
+		}
+		printf("\n");
+		p = p->noeud_suivant;
+	}
 }
 
 void colorier_graphe(pgraphe_t g, int *couleurs)
@@ -417,13 +430,15 @@ int elementaire(pgraphe_t g, chemin_t c)
 	int tab[taille];
 	pchemin_t ch = &c;
 
-	for(int i = 0; i < taille; i++){
+	for (int i = 0; i < taille; i++)
+	{
 		tab[i] = 0;
 	}
 
 	while (ch != NULL)
 	{
-		if(tab[ch->noeud->label] == 1){
+		if (tab[ch->noeud->label] == 1)
+		{
 			return 0;
 		}
 		tab[ch->noeud->label] = 1;
@@ -434,7 +449,6 @@ int elementaire(pgraphe_t g, chemin_t c)
 
 int simple(pgraphe_t g, chemin_t c)
 {
-
 
 	return 1;
 }
