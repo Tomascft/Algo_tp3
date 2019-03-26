@@ -27,4 +27,7 @@ int main (int argc, char **argv)
   
   ecrire_graphe (g) ;      
 
+  //printf("arc sortants:%d\n",degre_sortant_noeud(g,g));
+
+  return 0;
 }

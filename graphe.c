@@ -35,7 +35,7 @@ parc_t existence_arc(parc_t l, pnoeud_t n)
 	return p;
 }
 
-void ajouter_arc(pnoeud_t o, pnoeud_t d, int distance)
+void ajouter_arc(pnoeud_t o, pnoeud_t d, int distance) //distance est le poid de l'arc
 {
 	parc_t parc;
 
@@ -148,6 +148,7 @@ void ecrire_graphe(pnoeud_t p)
 }
 
 // ===================================================================
+//nos fonctions
 
 int nombre_arcs(pgraphe_t g)
 {
@@ -187,18 +188,23 @@ int degre_sortant_noeud(pgraphe_t g, pnoeud_t n)
     du noeud n dans le graphe g.
   */
 	int degre = 0;
-	parc_t a = n->liste_arcs;
+	pnoeud_t b=g;
+	while(b!=NULL){
+		if(b==n){
+			parc_t a = n->liste_arcs;
+			while (a != NULL)
+			{
+				degre++;
+				a = a->arc_suivant;
+			}
 
-	while (a != NULL)
-	{
-		//if (a == existence_arc(a, g))
-		//{
-		degre++;
-		//}
-		a = a->arc_suivant;
+			return degre;
+		}
+		b=b->noeud_suivant;
 	}
+	return -1;
 
-	return degre;
+	
 }
 
 int degre_entrant_noeud(pgraphe_t g, pnoeud_t n)
@@ -208,8 +214,8 @@ int degre_entrant_noeud(pgraphe_t g, pnoeud_t n)
     dans le noeud n dans le graphe g
   */
 	int degre = 0;
-	pnoeud_t p = g;
 
+	pnoeud_t p = g;
 	while (p != NULL)
 	{
 		parc_t a = p->liste_arcs;
@@ -223,7 +229,6 @@ int degre_entrant_noeud(pgraphe_t g, pnoeud_t n)
 		}
 		p = p->noeud_suivant;
 	}
-
 	return degre;
 }
 
@@ -262,10 +267,7 @@ int degre_minimal_graphe(pgraphe_t g)
 		}
 		p = p->noeud_suivant;
 	}
-
 	return min;
-
-	return 0;
 }
 
 int independant(pgraphe_t g) //On compte le nombre de noeuds avec un seul arc. Jsp si c'est ca.
