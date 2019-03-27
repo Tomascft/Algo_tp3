@@ -25,9 +25,12 @@ int main (int argc, char **argv)
     la fonction ecrire_graphe affiche le graphe a l'ecran
   */  
   
- // ecrire_graphe (g) ;      
+  ecrire_graphe (g) ;      
 
   //printf("arc sortants:%d\n",degre_sortant_noeud(g,g));
-  afficher_graphe_profondeur(g);
+  //afficher_graphe_profondeur(g);
+
+  printf("graphe complet: %d\n",complet(g));
+
   return 0;
 }

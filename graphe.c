@@ -294,37 +294,22 @@ int complet(pgraphe_t g)
 	/* Toutes les paires de sommet du graphe sont jointes par un arc */
 	pnoeud_t p = g;
 	int taille = nombre_sommets(g);
-	int tab[taille];
-	pnoeud_t listnoeud[taille];
-	int j=0;
-
-	while(p!=NULL){
-		listnoeud[j]=p;
-
-	}
-
-
-	for (int i = 0; i < taille; i++)
-	{
-		tab[i] = 0;
-	}
+	int nbarc;
 
 	while (p != NULL)
 	{
 		parc_t a = p->liste_arcs;
+		nbarc=0;
 		while (a != NULL)
 		{
-			tab[a->noeud->label] = 1;
+			if(a->noeud!=p){
+				nbarc++;
+			}
 			a = a->arc_suivant;
 		}
-		for (int i = 0; i < taille; i++)
-		{
-			if (tab[i] == 0)
-			{
-				return 0;
-			}
-			tab[i] = 0;
-		}
+		if(nbarc!=taille-1)
+			return 0;
+
 		p = p->noeud_suivant;
 	}
 
