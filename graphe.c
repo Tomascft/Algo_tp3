@@ -270,7 +270,7 @@ int degre_minimal_graphe(pgraphe_t g)
 	return min;
 }
 
-int independant(pgraphe_t g) //On compte le nombre de noeuds avec un seul arc. Jsp si c'est ca.
+int independant(pgraphe_t g) 
 {
 	/* Les aretes du graphe n'ont pas de sommet en commun. On verra plus tard ce qu'il faut faire*/
 	pnoeud_t p = g;
@@ -281,12 +281,12 @@ int independant(pgraphe_t g) //On compte le nombre de noeuds avec un seul arc. J
 		tmp = degre_entrant_noeud(g, p);
 		if (tmp > 1)
 		{
-			return 1;
+			return 0; //Faux
 		}
 		p = p->noeud_suivant;
 	}
 
-	return 0;
+	return 1; //Vrai
 }
 
 int complet(pgraphe_t g)

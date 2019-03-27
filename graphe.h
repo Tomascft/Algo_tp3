@@ -89,3 +89,6 @@ int plus_court_chemin (pgraphe_t g, int origine, int destination, int *chemin,
   placer les fonctions de l'examen 2017 juste apres
 */
 
+int elementaire(pgraphe_t g, chemin_t c);
+
+int simple(pgraphe_t g, chemin_t c);
