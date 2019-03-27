@@ -242,7 +242,7 @@ int degre_maximal_graphe(pgraphe_t g)
 
 	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
+		tmp = degre_sortant_noeud(g, p); // + degre_entrant_noeud(g,p);
 		if (tmp > max)
 		{
 			max = tmp;
@@ -260,7 +260,7 @@ int degre_minimal_graphe(pgraphe_t g)
 
 	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
+		tmp = degre_sortant_noeud(g, p); // + degre_entrant_noeud(g,p);
 		if (tmp > min)
 		{
 			min = tmp;
@@ -270,7 +270,7 @@ int degre_minimal_graphe(pgraphe_t g)
 	return min;
 }
 
-int independant(pgraphe_t g) 
+int independant(pgraphe_t g)
 {
 	/* Les aretes du graphe n'ont pas de sommet en commun. On verra plus tard ce qu'il faut faire*/
 	pnoeud_t p = g;
@@ -419,22 +419,21 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 
 int elementaire(pgraphe_t g, chemin_t c)
 {
-	int taille = nombre_sommets(g);
+	int taille = c.nb_noeuds;
 	int tab[taille];
-	pchemin_t ch = &c;
 
 	for (int i = 0; i < taille; i++)
 	{
 		tab[i] = 0;
 	}
 
-	while (ch != NULL)
+	for (int i = 0; i < c.nb_noeuds; i++)
 	{
-		if (tab[ch->noeud->label] == 1)
+		if (tab[c.labels[i]] == 1)
 		{
 			return 0;
 		}
-		tab[ch->noeud->label] = 1;
+		tab[c.labels[i]] = 1;
 	}
 
 	return 1;
@@ -442,6 +441,27 @@ int elementaire(pgraphe_t g, chemin_t c)
 
 int simple(pgraphe_t g, chemin_t c)
 {
- int i;
+	int taille = c.nb_noeuds - 1;
+	int tab[taille][2];
+
+	for (int i = 0; i < taille; i++)
+	{
+		tab[i][0] = c.labels[i];
+		tab[i][1] = c.labels[i + 1];
+
+		for (int j = 0; j < i; j++)
+		{
+			if (tab[i][0] == tab[j][0] && tab[i][1] == tab[j][1])
+			{
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+int eulerien(pgraphe_t g, chemin_t c)
+{
+
 	return 1;
 }
