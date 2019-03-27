@@ -278,7 +278,7 @@ int independant(pgraphe_t g)
 
 	while (p != NULL)
 	{
-		tmp = degre_entrant_noeud(g, p);
+		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
 		if (tmp > 1)
 		{
 			return 0; //Faux
@@ -299,15 +299,16 @@ int complet(pgraphe_t g)
 	while (p != NULL)
 	{
 		parc_t a = p->liste_arcs;
-		nbarc=0;
+		nbarc = 0;
 		while (a != NULL)
 		{
-			if(a->noeud!=p){
+			if (a->noeud != p)
+			{
 				nbarc++;
 			}
 			a = a->arc_suivant;
 		}
-		if(nbarc!=taille-1)
+		if (nbarc != taille - 1)
 			return 0;
 
 		p = p->noeud_suivant;
@@ -463,5 +464,40 @@ int simple(pgraphe_t g, chemin_t c)
 int eulerien(pgraphe_t g, chemin_t c)
 {
 
+	return 1;
+}
+
+int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'opti ?
+{
+	int taille = nombre_sommets(g);
+	int tab[taille];
+	pnoeud_t p = g;
+	int i = 0, j = 0;
+
+	while (p != NULL)
+	{
+		tab[i] = p->label;
+		p = p->noeud_suivant;
+		i++;
+	}
+
+	for (i = 0; i < c.nb_noeuds; i++)
+	{
+		for (int j = 0; j < taille; j++)
+		{
+			if (tab[j] == c.labels[i])
+			{
+				tab[j] = -1;
+			}
+		}
+	}
+
+	for (i = 0; i < taille; i++)
+	{
+		if (tab[i] != -1)
+		{
+			return 0;
+		}
+	}
 	return 1;
 }
