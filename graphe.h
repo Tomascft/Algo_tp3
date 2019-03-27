@@ -34,7 +34,7 @@ typedef struct c
 {
 
   int nb_noeuds; // Taille du chemin
-  int *labels; // Labels des noeuds du chemin.
+  int *labels;   // Labels des noeuds du chemin.
 
 } chemin_t, *pchemin_t;
 
@@ -89,6 +89,16 @@ int elementaire(pgraphe_t g, chemin_t c);
 
 int simple(pgraphe_t g, chemin_t c);
 
-int eulerien(pgraphe_t g , chemin_t c);
+int eulerien(pgraphe_t g, chemin_t c);
 
 int hamiltonien(pgraphe_t g, chemin_t c);
+
+int graphe_eurelien(pgraphe_t g);
+
+int graphe_hamiltonien(pgraphe_t g);
+
+int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y);
+
+int excenticite(pgraphe_t g, pnoeud_t n);
+
+int diametre(pgraphe_t g);
