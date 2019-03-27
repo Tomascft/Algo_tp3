@@ -88,3 +88,5 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 int elementaire(pgraphe_t g, chemin_t c);
 
 int simple(pgraphe_t g, chemin_t c);
+
+int eulerien(pgraphe_t g , chemin_t c);
