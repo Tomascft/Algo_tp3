@@ -457,6 +457,6 @@ int elementaire(pgraphe_t g, chemin_t c)
 
 int simple(pgraphe_t g, chemin_t c)
 {
-
+ int i;
 	return 1;
 }
