@@ -279,9 +279,13 @@ int independant(pgraphe_t g)
 	while (p != NULL)
 	{
 		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
-		if (tmp > 1)
+		if (tmp > 2)
 		{
 			return 0; //Faux
+		}
+		if(tmp == 2 && p->label != p->liste_arcs->noeud->label)
+		{
+			return 0;
 		}
 		p = p->noeud_suivant;
 	}
@@ -467,7 +471,7 @@ int eulerien(pgraphe_t g, chemin_t c)
 	return 1;
 }
 
-int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'opti ?
+int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'opti ?	
 {
 	int taille = nombre_sommets(g);
 	int tab[taille];
