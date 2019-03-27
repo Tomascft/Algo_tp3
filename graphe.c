@@ -295,6 +295,14 @@ int complet(pgraphe_t g)
 	pnoeud_t p = g;
 	int taille = nombre_sommets(g);
 	int tab[taille];
+	pnoeud_t listnoeud[taille];
+	int j=0;
+
+	while(p!=NULL){
+		listnoeud[j]=p;
+
+	}
+
 
 	for (int i = 0; i < taille; i++)
 	{
