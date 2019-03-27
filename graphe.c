@@ -426,22 +426,21 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 
 int elementaire(pgraphe_t g, chemin_t c)
 {
-	int taille = nombre_sommets(g);
+	int taille = c.nb_noeuds;
 	int tab[taille];
-	pchemin_t ch = &c;
 
 	for (int i = 0; i < taille; i++)
 	{
 		tab[i] = 0;
 	}
 
-	while (ch != NULL)
-	{
-		if (tab[ch->noeud->label] == 1)
+	for(int i = 0; i < c.nb_noeuds; i++){
+		pnoeud_t p = chercher_noeud(g,c.labels[i]);
+		if (tab[c.labels[i]] == 1)
 		{
 			return 0;
 		}
-		tab[ch->noeud->label] = 1;
+		tab[c.labels[i]] = 1;
 	}
 
 	return 1;
