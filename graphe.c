@@ -283,7 +283,7 @@ int independant(pgraphe_t g)
 		{
 			return 0; //Faux
 		}
-		if(tmp == 2 && p->label != p->liste_arcs->noeud->label)
+		if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
 		{
 			return 0;
 		}
@@ -467,11 +467,52 @@ int simple(pgraphe_t g, chemin_t c)
 
 int eulerien(pgraphe_t g, chemin_t c)
 {
+	int taille = nombre_arcs(g);
+	parc_t tab[taille];
+	pnoeud_t p = g;
+	int i = 0;
+
+	while (p != NULL)
+	{
+		parc_t a = p->liste_arcs;
+		while (a != NULL)
+		{
+			tab[i] = a;
+			a = a->arc_suivant;
+			i++;
+		}
+		p = p->noeud_suivant;
+	}
+
+	for (i = 0; i < c.nb_noeuds - 1; i++)
+	{
+		p = chercher_noeud(g, c.labels[i]);
+		parc_t a = p->liste_arcs;
+		while (a != NULL && a->noeud->label != c.labels[i + 1])
+		{
+			a = a->arc_suivant;
+		}
+		for(int j = 0; j < taille; j++)
+		{
+			if(tab[j] == a)
+			{
+				tab[j] = NULL;
+			}
+		}
+	}
+
+	for (i = 0; i < taille; i++)
+	{
+		if (tab[i] != NULL)
+		{
+			return 0;
+		}
+	}
 
 	return 1;
 }
 
-int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'opti ?	
+int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'opti ?
 {
 	int taille = nombre_sommets(g);
 	int tab[taille];
