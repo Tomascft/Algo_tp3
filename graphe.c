@@ -492,9 +492,9 @@ int eulerien(pgraphe_t g, chemin_t c)
 		{
 			a = a->arc_suivant;
 		}
-		for(int j = 0; j < taille; j++)
+		for (int j = 0; j < taille; j++)
 		{
-			if(tab[j] == a)
+			if (tab[j] == a)
 			{
 				tab[j] = NULL;
 			}
@@ -545,4 +545,35 @@ int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'o
 		}
 	}
 	return 1;
+}
+
+int graphe_eurelien(pgraphe_t g)
+{
+
+	return 0;
+}
+
+int graphe_hamiltonien(pgraphe_t g)
+{
+	pnoeud_t p = g;
+	
+	int a = 0;
+
+	while (p != NULL)
+	{
+		if (degre_entrant_noeud(g, p) == 0)
+		{
+			a++;
+		}
+		if (a == 2)	//Si il y a 2 noeuds non accesibles alors il ne peut pas y avoir de chemin hamiltonien
+		{
+			return 0;
+		}
+		p = p->noeud_suivant;
+	}
+	
+
+	//TODO : Pour chaque noeud, on essaye de visiter tout les autres noeuds du graphe. Si a un moment on y arrive return 1
+	//Possibilité d'opti : On compte le nombre de noeud non accesibles: 1 alors on est obligé de commencer par lui. 2 return 0
+	return 0;
 }
