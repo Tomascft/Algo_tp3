@@ -550,32 +550,55 @@ int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'o
 int graphe_eurelien(pgraphe_t g)
 {
 
-		//TODO : Pour chaque noeud, on essaye de visiter tout les arcs du graphe. Si a un moment on y arrive return 1. Utiliser nombre_arcs surement
-	
+	//TODO : Pour chaque noeud, on essaye de visiter tout les arcs du graphe. Si a un moment on y arrive return 1. Utiliser nombre_arcs surement
+	int graphe_eurelien(pgraphe_t g);
 	return 0;
 }
 
 int graphe_hamiltonien(pgraphe_t g)
 {
-	pnoeud_t p = g;
-	
-	int a = 0;
+	pnoeud_t p = g, isole;
+	int taille = nombre_sommets(g);
+	pnoeud_t accessibles[taille];
+	int a = 0, i = 0;
 
 	while (p != NULL)
 	{
 		if (degre_entrant_noeud(g, p) == 0)
 		{
 			a++;
+			isole = p;
 		}
-		if (a == 2)	//Si il y a 2 noeuds non accesibles alors il ne peut pas y avoir de chemin hamiltonien
+		if (a == 2) //Si il y a 2 noeuds non accesibles alors il ne peut pas y avoir de chemin hamiltonien
 		{
 			return 0;
 		}
+
 		p = p->noeud_suivant;
 	}
-	
 
-	//TODO : Pour chaque noeud, on essaye de visiter tout les autres noeuds du graphe. Si a un moment on y arrive return 1
-	//Possibilité d'opti : On compte le nombre de noeud non accesibles: 1 alors on est obligé de commencer par lui. 2 return 0
+	if (a == 1)
+	{
+		p = isole;
+		accessibles[i] = p;
+		i++;
+		//TODO : On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
+	}
+	else
+	{
+		p = g;
+
+		while (p != NULL)
+		{
+			//TODO : pareil mais pour tout les noeuds
+
+			for (i = 0; i < taille; i++)
+			{
+				accessibles[i] = NULL;
+			}
+			p = p->noeud_suivant;
+		}
+	}
+
 	return 0;
 }
