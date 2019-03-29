@@ -550,6 +550,8 @@ int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'o
 int graphe_eurelien(pgraphe_t g)
 {
 
+		//TODO : Pour chaque noeud, on essaye de visiter tout les arcs du graphe. Si a un moment on y arrive return 1. Utiliser nombre_arcs surement
+	
 	return 0;
 }
 
