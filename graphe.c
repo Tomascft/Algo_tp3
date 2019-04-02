@@ -387,7 +387,7 @@ void afficher_graphe_largeur(pgraphe_t g)
 }
 
 int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
-											int *nb_noeuds)
+					  int *nb_noeuds)
 {
 	/* 
      Calcul de la longueur du plus court chemin
@@ -555,12 +555,34 @@ int graphe_eurelien(pgraphe_t g)
 	return 0;
 }
 
-int graphe_hamiltonien(pgraphe_t g)
+int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
+{
+	int i = 0;
+
+	for (i = 0; i < taille; i++)
+	{
+		if (tab[i] == p)
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int graphe_hamiltonien(pgraphe_t g)	//JSP SI CA MARCHE
 {
 	pnoeud_t p = g, isole;
 	int taille = nombre_sommets(g);
 	pnoeud_t accessibles[taille];
-	int a = 0, i = 0;
+	int a = 0, i = 0, j = 0;
+
+	for (i = 0; i < taille; i++)
+	{
+		accessibles[i] = p;
+		p = p->noeud_suivant;
+	}
+	p = g;
 
 	while (p != NULL)
 	{
@@ -582,7 +604,29 @@ int graphe_hamiltonien(pgraphe_t g)
 		p = isole;
 		accessibles[i] = p;
 		i++;
-		//TODO : On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
+		//On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
+		while (p != NULL && j <= i)
+		{
+			p = accessibles[j];
+			parc_t a = p->liste_arcs;
+			while (a != NULL)
+			{
+
+				if (!check_dedans(accessibles, i + 1, a->noeud))
+				{
+					accessibles[i] = a->noeud;
+				}
+
+				i++;
+				a = a->arc_suivant;
+			}
+			j++;
+		}
+		if (i == taille - 1)
+		{
+			return 1;
+		}
+		return 0;
 	}
 	else
 	{
@@ -591,12 +635,35 @@ int graphe_hamiltonien(pgraphe_t g)
 		while (p != NULL)
 		{
 			//TODO : pareil mais pour tout les noeuds
+			while (p != NULL && j <= i)
+			{
+				p = accessibles[j];
+				parc_t a = p->liste_arcs;
+				while (a != NULL)
+				{
+
+					if (!check_dedans(accessibles, i + 1, a->noeud))
+					{
+						accessibles[i] = a->noeud;
+					}
+
+					i++;
+					a = a->arc_suivant;
+				}
+				j++;
+			}
+			if (i == taille - 1)
+			{
+				return 1;
+			}
 
 			for (i = 0; i < taille; i++)
 			{
 				accessibles[i] = NULL;
 			}
 			p = p->noeud_suivant;
+			i = 0;
+			accessibles[i] = p;
 		}
 	}
 
