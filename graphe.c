@@ -279,10 +279,11 @@ int independant(pgraphe_t g)
 	while (p != NULL)
 	{
 		tmp = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
-		if (tmp > 2)
+		if (tmp > 3)
 		{
 			return 0; //Faux
 		}
+		if(tmp == 3 && (p->label != p->liste_arcs->noeud->label || p->label != p->liste_arcs->arc_suivant->noeud->label))
 		if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
 		{
 			return 0;
@@ -551,7 +552,7 @@ int graphe_eurelien(pgraphe_t g)
 {
 
 	//TODO : Pour chaque noeud, on essaye de visiter tout les arcs du graphe. Si a un moment on y arrive return 1. Utiliser nombre_arcs surement
-	int graphe_eurelien(pgraphe_t g);
+	
 	return 0;
 }
 
