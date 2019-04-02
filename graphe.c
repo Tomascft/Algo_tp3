@@ -133,11 +133,11 @@ void ecrire_graphe(pnoeud_t p)
 
 	while (p != NULL)
 	{
-		printf("Noeud %d: ", p->label);
+		printf("Noeud %d (%d)): ", p->label, p->couleur);
 		arc = p->liste_arcs;
 		while (arc != NULL)
 		{
-			printf(" (%d %d) ", arc->noeud->label, arc->poids);
+			printf(" (%d(%d)  %d) ", arc->noeud->label,arc->noeud->couleur, arc->poids);
 			arc = arc->arc_suivant;
 		}
 		printf("\n");
@@ -373,7 +373,19 @@ void colorier_graphe(pgraphe_t g, int *couleurs)
     coloriage du graphe g
     Les couleurs des noeuds du graphe sont dans le tableau couleurs
   */
-
+ 	//int n=nombre_sommets(g);
+	pnoeud_t p=g;
+	while(p!=NULL){
+		int c=0;
+		parc_t a=p->liste_arcs;
+		while(a!=NULL){
+			if(a->noeud->couleur==p->couleur && a->noeud!=p)
+				c++;
+			a=a->arc_suivant;
+		}			
+		p->couleur=*(couleurs+c);
+		p=p->noeud_suivant;
+	}
 	return;
 }
 

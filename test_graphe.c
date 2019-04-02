@@ -24,11 +24,17 @@ int main (int argc, char **argv)
   /*
     la fonction ecrire_graphe affiche le graphe a l'ecran
   */  
-  
+
+  int colortab[10];
+  for(int i=0;i<10;i++){
+    colortab[i]=i;
+  }
+
+  colorier_graphe(g,colortab);
   ecrire_graphe (g) ;      
   //g->visite=0;
   //printf("arc sortants:%d\n",degre_sortant_noeud(g,g));
-  afficher_graphe_profondeur(g);
+  //afficher_graphe_profondeur(g);
 
   //printf("graphe complet: %d\n",complet(g));
 
