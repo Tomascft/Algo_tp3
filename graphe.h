@@ -11,7 +11,7 @@ typedef struct n
   int label;               // label du noeud/sommet
   parc_t liste_arcs;       // arcs sortants du noeud
   struct n *noeud_suivant; // noeud/sommet suivant du graphe
-
+  int visite;
 } noeud_t, *pnoeud_t;
 
 /*

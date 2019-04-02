@@ -350,21 +350,21 @@ void afficher_graphe_profondeur(pgraphe_t g)
 	/*
     afficher les noeuds du graphe avec un parcours en profondeur
   */
-	pnoeud_t p = g;
+ 	pnoeud_t p = g;
+	p->visite=1;
 
-	while (p != NULL)
-	{
+	printf("%d ",p->label);
+	parc_t tmp=p->liste_arcs;
 
-		printf("Noeud %d: ", p->label);
-		parc_t arc = p->liste_arcs;
-		while (arc != NULL)
-		{
-			printf(" (%d %d) ", arc->noeud->label, arc->poids);
-			arc = arc->arc_suivant;
+	while(tmp != NULL){
+
+		if(tmp->noeud->visite==0){
+
+			afficher_graphe_profondeur(tmp->noeud);
 		}
-		printf("\n");
-		p = p->noeud_suivant;
+		tmp=tmp->arc_suivant;
 	}
+	
 }
 
 void colorier_graphe(pgraphe_t g, int *couleurs)

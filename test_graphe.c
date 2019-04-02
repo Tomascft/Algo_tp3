@@ -26,11 +26,11 @@ int main (int argc, char **argv)
   */  
   
   ecrire_graphe (g) ;      
-
+  //g->visite=0;
   //printf("arc sortants:%d\n",degre_sortant_noeud(g,g));
-  //afficher_graphe_profondeur(g);
+  afficher_graphe_profondeur(g);
 
-  printf("graphe complet: %d\n",complet(g));
+  //printf("graphe complet: %d\n",complet(g));
 
   return 0;
 }
