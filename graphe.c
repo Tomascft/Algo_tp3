@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "graphe.h"
+#include "file.h"
 
 pnoeud_t chercher_noeud(pgraphe_t g, int label)
 {
@@ -377,6 +378,11 @@ void colorier_graphe(pgraphe_t g, int *couleurs)
  	//int n=nombre_sommets(g);
 	pnoeud_t p=g;
 	while(p!=NULL){
+		p->couleur=*couleurs;
+		p=p->noeud_suivant;
+	}
+	p=g;
+	while(p!=NULL){
 		int c=0;
 		parc_t a=p->liste_arcs;
 		while(a!=NULL){
@@ -395,7 +401,30 @@ void afficher_graphe_largeur(pgraphe_t g)
 	/*
     afficher les noeuds du graphe avec un parcours en largeur
   */
-
+ 	printf("Parcour largeur: ");
+ 	pnoeud_t p=g;
+	while(p!=NULL){
+ 	pfile_t f=creer_file();
+	int i;
+	
+	i=deposer_file(f,p);
+	while(!file_vide(f)){
+		pnoeud_t tmp=retirer_file(f);
+		if(tmp->visite==0){
+			printf("%d ",tmp->label);
+			tmp->visite=1;
+			parc_t a=tmp->liste_arcs;
+			while(a!=NULL){
+				if(a->noeud->visite==0){
+					i=deposer_file(f,a->noeud);
+				}
+				a=a->arc_suivant;
+			}
+		}
+	}
+	p=p->noeud_suivant;
+	}
+	printf("\n\n");
 	return;
 }
 
@@ -530,7 +559,7 @@ int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'o
 	int taille = nombre_sommets(g);
 	int tab[taille];
 	pnoeud_t p = g;
-	int i = 0, j = 0;
+	int i = 0;//, j = 0;
 
 	while (p != NULL)
 	{
@@ -583,7 +612,7 @@ int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 	return 0;
 }
 
-int graphe_hamiltonien(pgraphe_t g)	//JSP SI CA MARCHE
+/*int graphe_hamiltonien(pgraphe_t g)	//JSP SI CA MARCHE
 {
 	pnoeud_t p = g, isole;
 	int taille = nombre_sommets(g);
@@ -681,4 +710,4 @@ int graphe_hamiltonien(pgraphe_t g)	//JSP SI CA MARCHE
 	}
 
 	return 0;
-}
+}*/

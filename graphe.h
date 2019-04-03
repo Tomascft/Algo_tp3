@@ -1,3 +1,5 @@
+#ifndef _GRAPHE_H_
+#define _GRAPHE_H_
 
 typedef struct a *parc_t;
 
@@ -103,3 +105,5 @@ int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y);
 int excenticite(pgraphe_t g, pnoeud_t n);
 
 int diametre(pgraphe_t g);
+
+#endif
