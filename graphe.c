@@ -275,7 +275,7 @@ int independant(pgraphe_t g)
 {
 	/* Les aretes du graphe n'ont pas de sommet en commun. On verra plus tard ce qu'il faut faire*/
 	pnoeud_t p = g;
-	int tmp, taille = 0;
+	int tmp;
 
 	while (p != NULL)
 	{
@@ -332,7 +332,6 @@ int regulier(pgraphe_t g)
   */
 	pnoeud_t p = g;
 	int degre = degre_entrant_noeud(g, p) + degre_sortant_noeud(g, p);
-	int tmp;
 
 	p = p->noeud_suivant;
 	while (p != NULL)
@@ -411,7 +410,6 @@ void afficher_graphe_largeur(pgraphe_t g)
 	{
 		pfile_t f = creer_file();
 		int i;
-
 		i = deposer_file(f, p);
 		while (!file_vide(f))
 		{
@@ -437,14 +435,14 @@ void afficher_graphe_largeur(pgraphe_t g)
 	return;
 }
 
-void init(pgraphe_t g, pnoeud_t origine)
+void init(pgraphe_t g, int origine)
 {
 	pnoeud_t p = g;
 
 	while (p != NULL)
 	{
 		p->poid = 99;
-		if (p == origine)
+		if (p->label == origine)
 		{
 			p->poid = 0;
 		}
@@ -474,7 +472,7 @@ void supprimer_noued(pgraphe_t g, pnoeud_t tmp)
 	pnoeud_t p = g;
 	if (tmp != NULL)
 	{
-		if (p = tmp)
+		if (p == tmp)
 		{
 			g = g->noeud_suivant;
 		}
@@ -512,7 +510,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 	parc_t a;
 
 	int taille = nombre_sommets(g);
-	int *tab[taille];
+	int tab[taille];
 	int i;
 
 	init(p, origine);
@@ -535,7 +533,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 	{
 		tab[i] = p->label;
 		i++;
-		if (p->label = 99)
+		if (p->label == 99)
 		{
 			return 0;
 		}
@@ -547,9 +545,9 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 	}
 	tab[i] = origine;
 
-	nb_noeuds = i + 1;
+	*nb_noeuds = i + 1;
 	int j = 0;
-	for (i = nb_noeuds - 1; i >= 0; i--)
+	for (i = *nb_noeuds - 1; i >= 0; i--)
 	{
 		chemin[j] = tab[i];
 		j++;
@@ -763,10 +761,10 @@ int graphe_eurelien(pgraphe_t g)
 		while (p != NULL && j <= i)
 		{
 			tmp = p->liste_arcs;
-			while (a != NULL)
+			while (tmp != NULL)
 			{
 
-				if (!check_dedans_arc(accessibles, i + 1, a))
+				if (!check_dedans_arc(accessibles, i + 1, tmp))
 				{
 					accessibles[i] = tmp;
 				}
@@ -794,10 +792,10 @@ int graphe_eurelien(pgraphe_t g)
 			while (p != NULL && j <= i)
 			{
 				tmp = p->liste_arcs;
-				while (a != NULL)
+				while (tmp != NULL)
 				{
 
-					if (!check_dedans_arc(accessibles, i + 1, a))
+					if (!check_dedans_arc(accessibles, i + 1, tmp))
 					{
 						accessibles[i] = tmp;
 					}
@@ -939,7 +937,7 @@ int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
 	pnoeud_t tmp = NULL;
 	parc_t a;
 
-	init(g, x);
+	init(g, x->label);
 
 	while (p != NULL)
 	{
