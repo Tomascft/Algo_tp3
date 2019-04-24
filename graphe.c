@@ -814,7 +814,121 @@ int graphe_eurelien(pgraphe_t g)
 	}
 
 	return 0;*/
+	int flag = 0;
 
+	if (a == 1)
+	{
+		p = isole;
+		isole->precedent_chemin = NULL;
+		while (p != NULL && flag != 1)
+		{
+			p->visite = 1;
+			tmp = p->liste_arcs;
+			while (tmp != NULL && tmp->visite != 0)
+			{
+				tmp = tmp->arc_suivant;
+			}
+			if (tmp == NULL)
+			{
+				pnoeud_t test = g;
+				parc_t ta;
+				flag = 1;
+				while (test != NULL)
+				{
+					ta = test->liste_arcs;
+					while (ta != NULL)
+					{
+						if (ta->visite == 0)
+						{
+							flag = 0;
+						}
+						ta = ta->arc_suivant;
+					}
+					test = test->noeud_suivant;
+				}
+				p->visite = 0;
+				tmp = p->liste_arcs;
+				while (tmp != NULL)
+				{
+					tmp->visite = 0;
+					tmp = tmp->arc_suivant;
+				}
+				p = p->precedent_chemin;
+			}
+			else
+			{
+				tmp->noeud->precedent_chemin = p;
+				p = tmp->noeud;
+				tmp->visite = 1;
+			}
+		}
+		return flag;
+	}
+	else
+	{
+		pnoeud_t h = g;
+		p = h;
+		while (p != NULL)
+		{
+			p->precedent_chemin = NULL;
+			while (p != NULL && flag != 1)
+			{
+				p->visite = 1;
+				tmp = p->liste_arcs;
+				while (tmp != NULL && tmp->visite != 0)
+				{
+					tmp = tmp->arc_suivant;
+				}
+				if (tmp == NULL)
+				{
+					pnoeud_t test = g;
+					parc_t ta;
+					flag = 1;
+					while (test != NULL)
+					{
+						ta = test->liste_arcs;
+						while (ta != NULL)
+						{
+							if (ta->visite == 0)
+							{
+								flag = 0;
+							}
+							ta = ta->arc_suivant;
+						}
+						test = test->noeud_suivant;
+					}
+					p->visite = 0;
+					tmp = p->liste_arcs;
+					while (tmp != NULL)
+					{
+						tmp->visite = 0;
+						tmp = tmp->arc_suivant;
+					}
+					p = p->precedent_chemin;
+				}
+				else
+				{
+					tmp->noeud->precedent_chemin = p;
+					p = tmp->noeud;
+					tmp->visite = 1;
+				}
+			}
+			if (flag == 1)
+			{
+				return 1;
+			}
+			p = g;
+			while (p != NULL)
+			{
+				p->visite = 0;
+				p = p->noeud_suivant;
+			}
+			h = h->noeud_suivant;
+			p = h;
+		}
+	}
+
+	return 1;
 }
 
 int graphe_hamiltonien(pgraphe_t g)
@@ -934,7 +1048,7 @@ int graphe_hamiltonien(pgraphe_t g)
 				flag = 1;
 				while (test != NULL)
 				{
-					if (test->visite = 0)
+					if (test->visite == 0)
 					{
 						flag = 0;
 					}
@@ -979,7 +1093,7 @@ int graphe_hamiltonien(pgraphe_t g)
 					flag = 1;
 					while (test != NULL)
 					{
-						if (test->visite = 0)
+						if (test->visite == 0)
 						{
 							flag = 0;
 						}
