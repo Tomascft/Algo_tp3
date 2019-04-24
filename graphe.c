@@ -284,11 +284,12 @@ int independant(pgraphe_t g)
 		{
 			return 0; //Faux
 		}
-		if (tmp == 3 && (p->label != p->liste_arcs->noeud->label || p->label != p->liste_arcs->arc_suivant->noeud->label))
-			if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
-			{
+		if (tmp == 3 && (p->label != p->liste_arcs->noeud->label && p->label != p->liste_arcs->arc_suivant->noeud->label))
+			return 0;
+		if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
+		{
 				return 0;
-			}
+		}
 		p = p->noeud_suivant;
 	}
 
@@ -714,13 +715,52 @@ int check_dedans_arc(parc_t *tab, int taille, parc_t p)
 	return 0;
 }
 
+
+int graphe_connexe(pgraphe_t g){
+	afficher_graphe_profondeur(g);
+	pnoeud_t p=g;
+	while(p!=NULL){
+		if(p->visite==0)
+			return 0;
+		p=p->noeud_suivant;
+	}
+	return 1;
+}
+
+int degree_noeud(pgraphe_t g, pnoeud_t n){
+	int degree=0;
+	parc_t a=n->liste_arcs;
+	while(a!=NULL){
+		pnoeud_t p=g;
+		while(p!=NULL){
+			if(p->label==a->noeud->label){
+				parc_t tmp1= p->liste_arcs;
+				while(tmp1!=NULL){
+					if(tmp1->noeud->label==n->label){
+						degree++;
+						break;
+					}
+					tmp1=tmp1->arc_suivant;
+				}
+				break;
+			}
+			p=p->noeud_suivant;
+		}
+		a=a->arc_suivant;
+	}
+	return degree;
+}
+
+
 int graphe_eurelien(pgraphe_t g)
 {
-	int deg_imp = 0; //degree impair
+	if(!graphe_connexe(g))
+		return 0;
+	int deg_imp = 0; //degré impair
 	pnoeud_t p = g;
 	while (p != NULL)
 	{
-		if ((degre_sortant_noeud(g, p) + degre_entrant_noeud(g, p)) % 2 != 0)
+		if (degree_noeud(g,p) % 2 != 0)
 			deg_imp++;
 		p = p->noeud_suivant;
 	}
@@ -732,12 +772,14 @@ int graphe_eurelien(pgraphe_t g)
 
 int graphe_hamiltonien(pgraphe_t g)
 {
+	if(!graphe_connexe)
+		return 0;
 	pnoeud_t p = g;
 	int n = nombre_sommets(g);
 
 	while (p != NULL)
 	{
-		if (degre_entrant_noeud(g, p) < n / 2 || degre_sortant_noeud(g, p) < n / 2)
+		if (degree_noeud(g,p) < n / 2)
 		{
 			return 0;
 		}
