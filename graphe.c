@@ -314,7 +314,7 @@ int complet(pgraphe_t g)
 			}
 			a = a->arc_suivant;
 		}
-		if (nbarc != taille - 1)
+		if (nbarc < taille - 1)
 			return 0;
 
 		p = p->noeud_suivant;
@@ -422,7 +422,7 @@ void afficher_graphe_largeur(pgraphe_t g)
 				while (a != NULL)
 				{
 					if (a->noeud->visite == 0)
-					{
+					{	
 						i = deposer_file(f, a->noeud);
 					}
 					a = a->arc_suivant;
@@ -452,10 +452,10 @@ void init(pgraphe_t g, int origine)
 
 pnoeud_t trouve_min(pgraphe_t g)
 {
-	int min = 99;
+	int min = 100;
 	pnoeud_t tmp = NULL;
 	pnoeud_t p = g;
-
+	
 	while (p != NULL)
 	{
 		if (p->poid < min)
