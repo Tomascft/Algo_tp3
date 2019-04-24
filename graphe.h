@@ -40,7 +40,7 @@ typedef struct c
 {
 
   int nb_noeuds; // Taille du chemin
-  int *labels;   // Labels des noeuds du chemin.
+  pnoeud_t *labels;   // Labels des noeuds du chemin.
 
 } chemin_t, *pchemin_t;
 

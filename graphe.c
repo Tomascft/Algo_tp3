@@ -567,7 +567,7 @@ int elementaire(pgraphe_t g, chemin_t c)
 
 	for (int i = 0; i < c.nb_noeuds; i++)
 	{
-		p = chercher_noeud(g, c.labels[i]);
+		p = c.labels[i];
 		if (p->visite == 1)
 		{
 			return 0;
@@ -596,8 +596,8 @@ int simple(pgraphe_t g, chemin_t c)
 
 	for (int i = 0; i < c.nb_noeuds - 1; i++)
 	{
-		p = chercher_noeud(g, c.labels[i]);
-		a = existence_arc(p->liste_arcs, chercher_noeud(g, c.labels[i + 1]));
+		p = c.labels[i];
+		a = existence_arc(p->liste_arcs, c.labels[i + 1]);
 		if (a == NULL)
 		{
 			return -1; // Le chemin est faux
@@ -631,8 +631,8 @@ int eulerien(pgraphe_t g, chemin_t c)
 
 	for (i = 0; i < c.nb_noeuds - 1; i++)
 	{
-		p = chercher_noeud(g, c.labels[i]);
-		a = existence_arc(p->liste_arcs, chercher_noeud(g, c.labels[i + 1]));
+		p = c.labels[i];
+		a = existence_arc(p->liste_arcs, c.labels[i + 1]);
 		a->visite = 1;
 	}
 
@@ -666,7 +666,7 @@ int hamiltonien(pgraphe_t g, chemin_t c)
 
 	for (i = 0; i < c.nb_noeuds; i++)
 	{
-		p = chercher_noeud(g, c.labels[i]);
+		p = c.labels[i];
 		p->visite = 1;
 	}
 
