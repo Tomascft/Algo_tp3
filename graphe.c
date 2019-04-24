@@ -772,7 +772,7 @@ int graphe_eurelien(pgraphe_t g)
 
 int graphe_hamiltonien(pgraphe_t g)
 {
-	if(!graphe_connexe)
+	if(!graphe_connexe(g))
 		return 0;
 	pnoeud_t p = g;
 	int n = nombre_sommets(g);
