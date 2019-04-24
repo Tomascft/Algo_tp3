@@ -594,11 +594,11 @@ int simple(pgraphe_t g, chemin_t c)
 		p = p->noeud_suivant;
 	}
 
-	for (int i = 0; i < c.nb_noeuds; i++)
+	for (int i = 0; i < c.nb_noeuds - 1; i++)
 	{
 		p = chercher_noeud(g, c.labels[i]);
 		a = existence_arc(p->liste_arcs, chercher_noeud(g, c.labels[i + 1]));
-		if(a == NULL)
+		if (a == NULL)
 		{
 			return -1; // Le chemin est faux
 		}
@@ -614,19 +614,17 @@ int simple(pgraphe_t g, chemin_t c)
 
 int eulerien(pgraphe_t g, chemin_t c)
 {
-	int taille = nombre_arcs(g);
-	parc_t tab[taille];
 	pnoeud_t p = g;
+	parc_t a;
 	int i = 0;
 
 	while (p != NULL)
 	{
-		parc_t a = p->liste_arcs;
-		while (a != NULL)
+		a = p->liste_arcs;
+		while(a != NULL)
 		{
-			tab[i] = a;
+			a->visite = 0;
 			a = a->arc_suivant;
-			i++;
 		}
 		p = p->noeud_suivant;
 	}
@@ -634,63 +632,54 @@ int eulerien(pgraphe_t g, chemin_t c)
 	for (i = 0; i < c.nb_noeuds - 1; i++)
 	{
 		p = chercher_noeud(g, c.labels[i]);
-		parc_t a = p->liste_arcs;
-		while (a != NULL && a->noeud->label != c.labels[i + 1])
-		{
-			a = a->arc_suivant;
-		}
-		for (int j = 0; j < taille; j++)
-		{
-			if (tab[j] == a)
-			{
-				tab[j] = NULL;
-			}
-		}
+		a = existence_arc(p->liste_arcs, chercher_noeud(g, c.labels[i + 1]));
+		a->visite = 1;
 	}
 
-	for (i = 0; i < taille; i++)
+	p = g;
+	while (p != NULL)
 	{
-		if (tab[i] != NULL)
-		{
-			return 0;
+		a = p->liste_arcs;
+		while(a != NULL){
+			if(a->visite != 1)
+			{
+				return 0;
+			}
+			a = a->arc_suivant;
 		}
+		p = p->noeud_suivant;
 	}
 
 	return 1;
 }
 
-int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'opti ?
+int hamiltonien(pgraphe_t g, chemin_t c)
 {
-	int taille = nombre_sommets(g);
-	int tab[taille];
 	pnoeud_t p = g;
-	int i = 0; //, j = 0;
+	int i = 0;
 
 	while (p != NULL)
 	{
-		tab[i] = p->label;
+		p->visite = 0;
 		p = p->noeud_suivant;
-		i++;
 	}
 
 	for (i = 0; i < c.nb_noeuds; i++)
 	{
-		for (int j = 0; j < taille; j++)
-		{
-			if (tab[j] == c.labels[i])
-			{
-				tab[j] = -1;
-			}
-		}
+		p = chercher_noeud(g, c.labels[i]);
+		p->visite = 1;
 	}
 
-	for (i = 0; i < taille; i++)
+	p = g;
+	while (p != NULL)
 	{
-		if (tab[i] != -1)
+		if (p->visite != 1)
 		{
 			return 0;
 		}
+		p = p->noeud_suivant;
 	}
+
 	return 1;
 }
 
