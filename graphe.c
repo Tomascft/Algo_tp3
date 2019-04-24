@@ -138,7 +138,7 @@ void ecrire_graphe(pnoeud_t p)
 		arc = p->liste_arcs;
 		while (arc != NULL)
 		{
-			printf(" (%d(%d)  %d) ", arc->noeud->label,arc->noeud->couleur, arc->poids);
+			printf(" (%d(%d)  %d) ", arc->noeud->label, arc->noeud->couleur, arc->poids);
 			arc = arc->arc_suivant;
 		}
 		printf("\n");
@@ -284,11 +284,11 @@ int independant(pgraphe_t g)
 		{
 			return 0; //Faux
 		}
-		if(tmp == 3 && (p->label != p->liste_arcs->noeud->label || p->label != p->liste_arcs->arc_suivant->noeud->label))
-		if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
-		{
-			return 0;
-		}
+		if (tmp == 3 && (p->label != p->liste_arcs->noeud->label || p->label != p->liste_arcs->arc_suivant->noeud->label))
+			if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
+			{
+				return 0;
+			}
 		p = p->noeud_suivant;
 	}
 
@@ -352,21 +352,22 @@ void afficher_graphe_profondeur(pgraphe_t g)
 	/*
     afficher les noeuds du graphe avec un parcours en profondeur
   */
- 	pnoeud_t p = g;
-	p->visite=1;
+	pnoeud_t p = g;
+	p->visite = 1;
 
-	printf("%d ",p->label);
-	parc_t tmp=p->liste_arcs;
+	printf("%d ", p->label);
+	parc_t tmp = p->liste_arcs;
 
-	while(tmp != NULL){
+	while (tmp != NULL)
+	{
 
-		if(tmp->noeud->visite==0){
+		if (tmp->noeud->visite == 0)
+		{
 
 			afficher_graphe_profondeur(tmp->noeud);
 		}
-		tmp=tmp->arc_suivant;
+		tmp = tmp->arc_suivant;
 	}
-	
 }
 
 void colorier_graphe(pgraphe_t g, int *couleurs)
@@ -375,23 +376,26 @@ void colorier_graphe(pgraphe_t g, int *couleurs)
     coloriage du graphe g
     Les couleurs des noeuds du graphe sont dans le tableau couleurs
   */
- 	//int n=nombre_sommets(g);
-	pnoeud_t p=g;
-	while(p!=NULL){
-		p->couleur=*couleurs;
-		p=p->noeud_suivant;
+	//int n=nombre_sommets(g);
+	pnoeud_t p = g;
+	while (p != NULL)
+	{
+		p->couleur = *couleurs;
+		p = p->noeud_suivant;
 	}
-	p=g;
-	while(p!=NULL){
-		int c=0;
-		parc_t a=p->liste_arcs;
-		while(a!=NULL){
-			if(a->noeud->couleur==p->couleur && a->noeud!=p)
+	p = g;
+	while (p != NULL)
+	{
+		int c = 0;
+		parc_t a = p->liste_arcs;
+		while (a != NULL)
+		{
+			if (a->noeud->couleur == p->couleur && a->noeud != p)
 				c++;
-			a=a->arc_suivant;
-		}			
-		p->couleur=*(couleurs+c);
-		p=p->noeud_suivant;
+			a = a->arc_suivant;
+		}
+		p->couleur = *(couleurs + c);
+		p = p->noeud_suivant;
 	}
 	return;
 }
@@ -401,34 +405,39 @@ void afficher_graphe_largeur(pgraphe_t g)
 	/*
     afficher les noeuds du graphe avec un parcours en largeur
   */
- 	printf("Parcour largeur: ");
- 	pnoeud_t p=g;
-	while(p!=NULL){
- 	pfile_t f=creer_file();
-	int i;
-	
-	i=deposer_file(f,p);
-	while(!file_vide(f)){
-		pnoeud_t tmp=retirer_file(f);
-		if(tmp->visite==0){
-			printf("%d ",tmp->label);
-			tmp->visite=1;
-			parc_t a=tmp->liste_arcs;
-			while(a!=NULL){
-				if(a->noeud->visite==0){
-					i=deposer_file(f,a->noeud);
+	printf("Parcour largeur: ");
+	pnoeud_t p = g;
+	while (p != NULL)
+	{
+		pfile_t f = creer_file();
+		int i;
+
+		i = deposer_file(f, p);
+		while (!file_vide(f))
+		{
+			pnoeud_t tmp = retirer_file(f);
+			if (tmp->visite == 0)
+			{
+				printf("%d ", tmp->label);
+				tmp->visite = 1;
+				parc_t a = tmp->liste_arcs;
+				while (a != NULL)
+				{
+					if (a->noeud->visite == 0)
+					{
+						i = deposer_file(f, a->noeud);
+					}
+					a = a->arc_suivant;
 				}
-				a=a->arc_suivant;
 			}
 		}
-	}
-	p=p->noeud_suivant;
+		p = p->noeud_suivant;
 	}
 	printf("\n\n");
 	return;
 }
 
-int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
+int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //A FAIRE
 					  int *nb_noeuds)
 {
 	/* 
@@ -559,7 +568,7 @@ int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'o
 	int taille = nombre_sommets(g);
 	int tab[taille];
 	pnoeud_t p = g;
-	int i = 0;//, j = 0;
+	int i = 0; //, j = 0;
 
 	while (p != NULL)
 	{
@@ -589,14 +598,6 @@ int hamiltonien(pgraphe_t g, chemin_t c) // Ca utilise bcp de boucles, moyen d'o
 	return 1;
 }
 
-int graphe_eurelien(pgraphe_t g)
-{
-
-	//TODO : Pour chaque noeud, on essaye de visiter tout les arcs du graphe. Si a un moment on y arrive return 1. Utiliser nombre_arcs surement
-	
-	return 0;
-}
-
 int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 {
 	int i = 0;
@@ -612,7 +613,138 @@ int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 	return 0;
 }
 
-/*int graphe_hamiltonien(pgraphe_t g)	//JSP SI CA MARCHE
+int check_dedans_arc(parc_t *tab, int taille, parc_t p)
+{
+	int i = 0;
+
+	for (i = 0; i < taille; i++)
+	{
+		if (tab[i] == p)
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int graphe_eurelien(pgraphe_t g)
+{
+	pnoeud_t p = g, h,isole;
+	int taille = nombre_arcs(g);
+	parc_t accessibles[taille];
+	parc_t tmp;
+	int a = 0, i = 0, j = 0;
+
+	while (p != NULL)
+	{
+		tmp = p->liste_arcs;
+		while (tmp != NULL)
+		{
+			accessibles[i] = tmp;
+			tmp = tmp->arc_suivant;
+			i++;
+		}
+		p = p->noeud_suivant;
+	}
+	p = g;
+
+	if (independant(g))
+	{
+		return 0;
+	}
+
+	while (p != NULL)
+	{
+		if (degre_entrant_noeud(g, p) == 0)
+		{
+			a++;
+			isole = p;
+		}
+		if (a == 2) //Si il y a 2 noeuds non accesibles alors il ne peut pas y avoir de chemin hamiltonien
+		{
+			return 0;
+		}
+
+		p = p->noeud_suivant;
+	}
+
+	if (a == 1)
+	{
+		p = isole;
+		accessibles[0] = p->liste_arcs;
+		i++;
+
+		//On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
+		while (p != NULL && j <= i)
+		{
+			tmp = p->liste_arcs;
+			while (a != NULL)
+			{
+
+				if (!check_dedans_arc(accessibles, i + 1, a))
+				{
+					accessibles[i] = tmp;
+				}
+
+				i++;
+				tmp = tmp->arc_suivant;
+			}
+			j++;
+			p = accessibles[j]->noeud;
+		}
+		if (i == taille - 1)
+		{
+			return 1;
+		}
+		return 0;
+	}
+	else
+	{	
+		h = g;
+		p = h;
+		accessibles[0] = p->liste_arcs;
+		i=1;
+		while (p != NULL)
+		{
+			//TODO : pareil mais pour tout les noeuds
+			while (p != NULL && j <= i)
+			{
+				tmp = p->liste_arcs;
+				while (a != NULL)
+				{
+
+					if (!check_dedans_arc(accessibles, i + 1, a))
+					{
+						accessibles[i] = tmp;
+					}
+
+					i++;
+					tmp = tmp->arc_suivant;
+				}
+				j++;
+				p = accessibles[j]->noeud;
+			}
+			if (i == taille - 1)
+			{
+				return 1;
+			}
+
+			for (i = 0; i < taille; i++)
+			{
+				accessibles[i] = NULL;
+			}
+			h = h->noeud_suivant;
+			p = h;
+			i = 0;
+			accessibles[i] = p->liste_arcs;
+		}
+	}
+
+	return 0;
+}
+
+int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
 {
 	pnoeud_t p = g, isole;
 	int taille = nombre_sommets(g);
@@ -625,6 +757,11 @@ int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 		p = p->noeud_suivant;
 	}
 	p = g;
+
+	if (independant(g))
+	{
+		return 0;
+	}
 
 	while (p != NULL)
 	{
@@ -649,7 +786,7 @@ int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 		//On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
 		while (p != NULL && j <= i)
 		{
-			p = accessibles[j];
+
 			parc_t a = p->liste_arcs;
 			while (a != NULL)
 			{
@@ -663,6 +800,7 @@ int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 				a = a->arc_suivant;
 			}
 			j++;
+			p = accessibles[j];
 		}
 		if (i == taille - 1)
 		{
@@ -710,4 +848,22 @@ int check_dedans(pnoeud_t *tab, int taille, pnoeud_t p)
 	}
 
 	return 0;
-}*/
+}
+
+int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
+{
+
+	return 0;
+}
+
+int excenticite(pgraphe_t g, pnoeud_t n)
+{
+
+	return 0;
+}
+
+int diametre(pgraphe_t g)
+{
+
+	return 0;
+}
