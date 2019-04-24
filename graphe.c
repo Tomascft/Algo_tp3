@@ -472,12 +472,21 @@ pnoeud_t trouve_min(pgraphe_t g)
 void supprimer_noued(pgraphe_t g, pnoeud_t tmp)
 {
 	pnoeud_t p = g;
-
-	while (p->noeud_suivant != tmp)
+	if (tmp != NULL)
 	{
-		p = p->noeud_suivant;
+		if (p = tmp)
+		{
+			g = g->noeud_suivant;
+		}
+		else
+		{
+			while (p->noeud_suivant != tmp)
+			{
+				p = p->noeud_suivant;
+			}
+			p->noeud_suivant = tmp->noeud_suivant;
+		}
 	}
-	p->noeud_suivant = tmp->noeud_suivant;
 }
 
 void maj_distances(parc_t a, pnoeud_t s2)
@@ -506,20 +515,18 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 	int *tab[taille];
 	int i;
 
-	init(g, origine);
+	init(p, origine);
 
 	while (p != NULL)
 	{
-		tmp = trouve_min(g);
-		supprimer_noued(g, tmp);
+		tmp = trouve_min(p);
+		supprimer_noued(p, tmp);
 		a = tmp->liste_arcs;
 		while (a != NULL)
 		{
 			maj_distances(a, tmp);
 			a = a->arc_suivant;
 		}
-
-		p = p->noeud_suivant;
 	}
 
 	i = 0;
@@ -528,9 +535,13 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 	{
 		tab[i] = p->label;
 		i++;
+		if (p->label = 99)
+		{
+			return 0;
+		}
 		p = p->precedent_chemin;
 	}
-	if(p == NULL)
+	if (p == NULL)
 	{
 		return 0;
 	}
@@ -538,10 +549,10 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 
 	nb_noeuds = i + 1;
 	int j = 0;
-	for(i = nb_noeuds - 1; i >= 0; i--)
+	for (i = nb_noeuds - 1; i >= 0; i--)
 	{
 		chemin[j] = tab[i];
-		j++; 
+		j++;
 	}
 	return 1;
 }
