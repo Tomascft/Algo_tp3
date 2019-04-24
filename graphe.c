@@ -437,6 +437,58 @@ void afficher_graphe_largeur(pgraphe_t g)
 	return;
 }
 
+void init(pgraphe_t g, pnoeud_t origine)
+{
+	pnoeud_t p = g;
+
+	while (p != NULL)
+	{
+		p->poid = 99;
+		if (p == origine)
+		{
+			p->poid = 0;
+		}
+		p = p->noeud_suivant;
+	}
+}
+
+pnoeud_t trouve_min(pgraphe_t g)
+{
+	int min = 99;
+	pnoeud_t tmp = NULL;
+	pnoeud_t p = g;
+
+	while (p != NULL)
+	{
+		if (p->poid < min)
+		{
+			min = p->poid;
+			tmp = p;
+		}
+		p = p->noeud_suivant;
+	}
+	return tmp;
+}
+void supprimer_noued(pgraphe_t g, pnoeud_t tmp)
+{
+	pnoeud_t p = g;
+
+	while (p->noeud_suivant != tmp)
+	{
+		p = p->noeud_suivant;
+	}
+	p->noeud_suivant = tmp->noeud_suivant;
+}
+
+void maj_distances(parc_t a, pnoeud_t s2)
+{
+	if (a->noeud->poid > s2->poid + a->poids)
+	{
+		a->noeud->poid = s2->poid + a->poids;
+		a->noeud->precedent_chemin = s2;
+	}
+}
+
 int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //A FAIRE
 					  int *nb_noeuds)
 {
@@ -446,31 +498,52 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
      La variable chemin contient les noeuds du chemin le plus court
      nb_noeuds indique le nombre de noeuds du chemin
   */
-
 	pnoeud_t p = g;
-	pnoeud_t or, dest;
+	pnoeud_t tmp = NULL;
+	parc_t a;
 
-	if (origine == destination)
-	{
-		*nb_noeuds = 1;
-		chemin[0] = origine;
-		return 1;
-	}
+	int taille = nombre_sommets(g);
+	int *tab[taille];
+	int i;
+
+	init(g, origine);
 
 	while (p != NULL)
 	{
-		if (p->label == origine)
+		tmp = trouve_min(g);
+		supprimer_noued(g, tmp);
+		a = tmp->liste_arcs;
+		while (a != NULL)
 		{
-			or = p;
+			maj_distances(a, tmp);
+			a = a->arc_suivant;
 		}
-		if (p->label == destination)
-		{
-			dest = p;
-		}
+
 		p = p->noeud_suivant;
 	}
 
-	return 0;
+	i = 0;
+	p = chercher_noeud(g, destination);
+	while (p != NULL || p->label != origine)
+	{
+		tab[i] = p->label;
+		i++;
+		p = p->precedent_chemin;
+	}
+	if(p == NULL)
+	{
+		return 0;
+	}
+	tab[i] = origine;
+
+	nb_noeuds = i + 1;
+	int j = 0;
+	for(i = nb_noeuds - 1; i >= 0; i--)
+	{
+		chemin[j] = tab[i];
+		j++; 
+	}
+	return 1;
 }
 
 int elementaire(pgraphe_t g, chemin_t c)
@@ -851,23 +924,27 @@ int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
 
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
 {
-	pnoeud_t p = x;
-	int res;
-	int *chemin, *nb_noeuds;
+	pnoeud_t p = g;
+	pnoeud_t tmp = NULL;
+	parc_t a;
 
-	if (x == y)
+	init(g, x);
+
+	while (p != NULL)
 	{
-		return 0;
+		tmp = trouve_min(g);
+		supprimer_noued(g, tmp);
+		a = tmp->liste_arcs;
+		while (a != NULL)
+		{
+			maj_distances(a, tmp);
+			a = a->arc_suivant;
+		}
+
+		p = p->noeud_suivant;
 	}
 
-	res = plus_court_chemin(g, x->label, y->label, chemin, nb_noeuds);
-
-	if (res == 0)
-	{
-		return -1;
-	}
-
-	return *nb_noeuds;
+	return y->poid;
 }
 
 int excentricite(pgraphe_t g, pnoeud_t n)
