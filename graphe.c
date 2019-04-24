@@ -529,7 +529,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 
 	i = 0;
 	p = chercher_noeud(g, destination);
-	while (p != NULL || p->label != origine)
+	while (p != NULL && p->label != origine)
 	{
 		tab[i] = p->label;
 		i++;
@@ -717,10 +717,10 @@ int check_dedans_arc(parc_t *tab, int taille, parc_t p)
 int graphe_eurelien(pgraphe_t g)
 {
 	pnoeud_t p = g, h, isole;
-	int taille = nombre_arcs(g);
-	parc_t accessibles[taille];
+	//int taille = nombre_arcs(g);
+	//parc_t accessibles[taille];
 	parc_t tmp;
-	int a = 0, i = 0, j = 0;
+	int a = 0; // i = 0, j = 0;
 
 	if (independant(g))
 	{
@@ -742,7 +742,7 @@ int graphe_eurelien(pgraphe_t g)
 		p = p->noeud_suivant;
 	}
 
-	if (a == 1)
+	/*if (a == 1)
 	{
 		p = isole;
 		accessibles[0] = p->liste_arcs;
@@ -813,15 +813,17 @@ int graphe_eurelien(pgraphe_t g)
 		}
 	}
 
-	return 0;
+	return 0;*/
+
 }
 
 int graphe_hamiltonien(pgraphe_t g)
 {
 	pnoeud_t p = g, isole;
-	int taille = nombre_sommets(g);
-	pnoeud_t accessibles[taille];
-	int a = 0, i = 0, j = 0;
+	//int taille = nombre_sommets(g);
+	//pnoeud_t accessibles[taille];
+	int a = 0; // i = 0, j = 0;
+	parc_t tmp;
 
 	if (independant(g))
 	{
@@ -843,7 +845,7 @@ int graphe_hamiltonien(pgraphe_t g)
 		p = p->noeud_suivant;
 	}
 
-	if (a == 1)
+	/*if (a == 1)
 	{
 		p = isole;
 		accessibles[i] = p;
@@ -910,9 +912,111 @@ int graphe_hamiltonien(pgraphe_t g)
 			i = 0;
 			accessibles[i] = p;
 		}
+		return O;
+	}*/
+	int flag = 0;
+
+	if (a == 1)
+	{
+		p = isole;
+		isole->precedent_chemin = NULL;
+		while (p != NULL && flag != 1)
+		{
+			p->visite = 1;
+			tmp = p->liste_arcs;
+			while (tmp != NULL && tmp->visite != 0)
+			{
+				tmp = tmp->arc_suivant;
+			}
+			if (tmp == NULL)
+			{
+				pnoeud_t test = g;
+				flag = 1;
+				while (test != NULL)
+				{
+					if (test->visite = 0)
+					{
+						flag = 0;
+					}
+					test = test->noeud_suivant;
+				}
+				p->visite = 0;
+				tmp = p->liste_arcs;
+				while (tmp != NULL)
+				{
+					tmp->visite = 0;
+					tmp = tmp->arc_suivant;
+				}
+				p = p->precedent_chemin;
+			}
+			else
+			{
+				tmp->noeud->precedent_chemin = p;
+				p = tmp->noeud;
+				tmp->visite = 1;
+			}
+		}
+		return flag;
+	}
+	else
+	{
+		pnoeud_t h = g;
+		p = h;
+		while (p != NULL)
+		{
+			p->precedent_chemin = NULL;
+			while (p != NULL && flag != 1)
+			{
+				p->visite = 1;
+				tmp = p->liste_arcs;
+				while (tmp != NULL && tmp->visite != 0)
+				{
+					tmp = tmp->arc_suivant;
+				}
+				if (tmp == NULL)
+				{
+					pnoeud_t test = g;
+					flag = 1;
+					while (test != NULL)
+					{
+						if (test->visite = 0)
+						{
+							flag = 0;
+						}
+						test = test->noeud_suivant;
+					}
+					p->visite = 0;
+					tmp = p->liste_arcs;
+					while (tmp != NULL)
+					{
+						tmp->visite = 0;
+						tmp = tmp->arc_suivant;
+					}
+					p = p->precedent_chemin;
+				}
+				else
+				{
+					tmp->noeud->precedent_chemin = p;
+					p = tmp->noeud;
+					tmp->visite = 1;
+				}
+			}
+			if (flag == 1)
+			{
+				return 1;
+			}
+			p = g;
+			while (p != NULL)
+			{
+				p->visite = 0;
+				p = p->noeud_suivant;
+			}
+			h = h->noeud_suivant;
+			p = h;
+		}
 	}
 
-	return 0;
+	return 1;
 }
 
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
