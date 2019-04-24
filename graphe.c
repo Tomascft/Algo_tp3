@@ -621,7 +621,7 @@ int eulerien(pgraphe_t g, chemin_t c)
 	while (p != NULL)
 	{
 		a = p->liste_arcs;
-		while(a != NULL)
+		while (a != NULL)
 		{
 			a->visite = 0;
 			a = a->arc_suivant;
@@ -640,8 +640,9 @@ int eulerien(pgraphe_t g, chemin_t c)
 	while (p != NULL)
 	{
 		a = p->liste_arcs;
-		while(a != NULL){
-			if(a->visite != 1)
+		while (a != NULL)
+		{
+			if (a->visite != 1)
 			{
 				return 0;
 			}
@@ -721,19 +722,6 @@ int graphe_eurelien(pgraphe_t g)
 	parc_t tmp;
 	int a = 0, i = 0, j = 0;
 
-	while (p != NULL)
-	{
-		tmp = p->liste_arcs;
-		while (tmp != NULL)
-		{
-			accessibles[i] = tmp;
-			tmp = tmp->arc_suivant;
-			i++;
-		}
-		p = p->noeud_suivant;
-	}
-	p = g;
-
 	if (independant(g))
 	{
 		return 0;
@@ -767,12 +755,12 @@ int graphe_eurelien(pgraphe_t g)
 			while (tmp != NULL)
 			{
 
-				if (!check_dedans_arc(accessibles, i + 1, tmp))
+				if (!check_dedans_arc(accessibles, i, tmp))
 				{
 					accessibles[i] = tmp;
+					i++;
 				}
 
-				i++;
 				tmp = tmp->arc_suivant;
 			}
 			j++;
@@ -798,12 +786,12 @@ int graphe_eurelien(pgraphe_t g)
 				while (tmp != NULL)
 				{
 
-					if (!check_dedans_arc(accessibles, i + 1, tmp))
+					if (!check_dedans_arc(accessibles, i, tmp))
 					{
 						accessibles[i] = tmp;
+						i++;
 					}
 
-					i++;
 					tmp = tmp->arc_suivant;
 				}
 				j++;
@@ -828,19 +816,12 @@ int graphe_eurelien(pgraphe_t g)
 	return 0;
 }
 
-int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
+int graphe_hamiltonien(pgraphe_t g)
 {
 	pnoeud_t p = g, isole;
 	int taille = nombre_sommets(g);
 	pnoeud_t accessibles[taille];
 	int a = 0, i = 0, j = 0;
-
-	for (i = 0; i < taille; i++)
-	{
-		accessibles[i] = p;
-		p = p->noeud_suivant;
-	}
-	p = g;
 
 	if (independant(g))
 	{
@@ -875,12 +856,12 @@ int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
 			while (a != NULL)
 			{
 
-				if (!check_dedans(accessibles, i + 1, a->noeud))
+				if (!check_dedans(accessibles, i, a->noeud))
 				{
 					accessibles[i] = a->noeud;
+					i++;
 				}
 
-				i++;
 				a = a->arc_suivant;
 			}
 			j++;
@@ -906,12 +887,12 @@ int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
 				while (a != NULL)
 				{
 
-					if (!check_dedans(accessibles, i + 1, a->noeud))
+					if (!check_dedans(accessibles, i, a->noeud))
 					{
 						accessibles[i] = a->noeud;
+						i++;
 					}
 
-					i++;
 					a = a->arc_suivant;
 				}
 				j++;
