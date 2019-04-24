@@ -630,7 +630,7 @@ int check_dedans_arc(parc_t *tab, int taille, parc_t p)
 
 int graphe_eurelien(pgraphe_t g)
 {
-	pnoeud_t p = g, h,isole;
+	pnoeud_t p = g, h, isole;
 	int taille = nombre_arcs(g);
 	parc_t accessibles[taille];
 	parc_t tmp;
@@ -700,14 +700,13 @@ int graphe_eurelien(pgraphe_t g)
 		return 0;
 	}
 	else
-	{	
+	{
 		h = g;
 		p = h;
 		accessibles[0] = p->liste_arcs;
-		i=1;
+		i = 1;
 		while (p != NULL)
 		{
-			//TODO : pareil mais pour tout les noeuds
 			while (p != NULL && j <= i)
 			{
 				tmp = p->liste_arcs;
@@ -814,7 +813,7 @@ int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
 
 		while (p != NULL)
 		{
-			//TODO : pareil mais pour tout les noeuds
+
 			while (p != NULL && j <= i)
 			{
 				p = accessibles[j];
@@ -852,18 +851,58 @@ int graphe_hamiltonien(pgraphe_t g) //JSP SI CA MARCHE
 
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
 {
+	pnoeud_t p = x;
+	int res;
+	int *chemin, *nb_noeuds;
 
-	return 0;
+	if (x == y)
+	{
+		return 0;
+	}
+
+	res = plus_court_chemin(g, x->label, y->label, chemin, nb_noeuds);
+
+	if (res == 0)
+	{
+		return -1;
+	}
+
+	return *nb_noeuds;
 }
 
-int excenticite(pgraphe_t g, pnoeud_t n)
+int excentricite(pgraphe_t g, pnoeud_t n)
 {
+	// Pour chaque noeud du graphe on regarde ca distance avec n
+	int max = -1, tmp;
+	pnoeud_t p = g;
 
-	return 0;
+	while (p != NULL)
+	{
+		tmp = distance(g, n, p);
+		if (tmp > max)
+		{
+			max = tmp;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return max;
 }
 
 int diametre(pgraphe_t g)
 {
+	pnoeud_t p = g;
+	int max = -1, tmp;
 
-	return 0;
+	while (p != NULL)
+	{
+		tmp = excentricite(g, p);
+		if (tmp > max)
+		{
+			max = tmp;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return max;
 }

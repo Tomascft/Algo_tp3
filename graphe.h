@@ -102,7 +102,7 @@ int graphe_hamiltonien(pgraphe_t g);
 
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y);
 
-int excenticite(pgraphe_t g, pnoeud_t n);
+int excentricite(pgraphe_t g, pnoeud_t n);
 
 int diametre(pgraphe_t g);
 
