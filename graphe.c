@@ -580,22 +580,35 @@ int elementaire(pgraphe_t g, chemin_t c)
 
 int simple(pgraphe_t g, chemin_t c)
 {
-	int taille = c.nb_noeuds - 1;
-	int tab[taille][2];
+	pnoeud_t p = g;
+	parc_t a = p->liste_arcs;
 
-	for (int i = 0; i < taille; i++)
+	while (p != NULL)
 	{
-		tab[i][0] = c.labels[i];
-		tab[i][1] = c.labels[i + 1];
-
-		for (int j = 0; j < i; j++)
+		a = p->liste_arcs;
+		while (a != NULL)
 		{
-			if (tab[i][0] == tab[j][0] && tab[i][1] == tab[j][1])
-			{
-				return 0;
-			}
+			a->visite = 0;
+			a = a->arc_suivant;
 		}
+		p = p->noeud_suivant;
 	}
+
+	for (int i = 0; i < c.nb_noeuds; i++)
+	{
+		p = chercher_noeud(g, c.labels[i]);
+		a = existence_arc(p->liste_arcs, chercher_noeud(g, c.labels[i + 1]));
+		if(a == NULL)
+		{
+			return -1; // Le chemin est faux
+		}
+		if (a->visite == 1)
+		{
+			return 0;
+		}
+		a->visite = 1;
+	}
+
 	return 1;
 }
 

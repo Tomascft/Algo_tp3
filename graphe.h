@@ -30,6 +30,7 @@ typedef struct a
 {
 
   int poids;             // poids de l arc
+  int visite;
   pnoeud_t noeud;        // identificateur du noeud destinataire
   struct a *arc_suivant; // arc suivant
 
