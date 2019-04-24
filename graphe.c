@@ -452,7 +452,7 @@ void init(pgraphe_t g, int origine)
 
 pnoeud_t trouve_min(pgraphe_t g)
 {
-	int min = 100;
+	int min = 99;
 	pnoeud_t tmp = NULL;
 	pnoeud_t p = g;
 
@@ -497,7 +497,7 @@ void maj_distances(parc_t a, pnoeud_t s2)
 }
 
 int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //A FAIRE
-					  int *nb_noeuds)
+											int *nb_noeuds)
 {
 	/* 
      Calcul de la longueur du plus court chemin
@@ -716,227 +716,38 @@ int check_dedans_arc(parc_t *tab, int taille, parc_t p)
 
 int graphe_eurelien(pgraphe_t g)
 {
-	pnoeud_t p = g, h, isole;
-	//int taille = nombre_arcs(g);
-	//parc_t accessibles[taille];
-	parc_t tmp;
-	int a = 0; // i = 0, j = 0;
-
-	if (independant(g))
-	{
-		return 0;
-	}
-
+	int deg_imp = 0; //degree impair
+	pnoeud_t p = g;
 	while (p != NULL)
 	{
-		if (degre_entrant_noeud(g, p) == 0)
-		{
-			a++;
-			isole = p;
-		}
-		if (a == 2) //Si il y a 2 noeuds non accesibles alors il ne peut pas y avoir de chemin hamiltonien
-		{
-			return 0;
-		}
-
+		if ((degre_sortant_noeud(g, p) + degre_entrant_noeud(g, p)) % 2 != 0)
+			deg_imp++;
 		p = p->noeud_suivant;
 	}
-
-	/*if (a == 1)
-	{
-		p = isole;
-		accessibles[0] = p->liste_arcs;
-		i++;
-
-		//On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
-		while (p != NULL && j <= i)
-		{
-			tmp = p->liste_arcs;
-			while (tmp != NULL)
-			{
-
-				if (!check_dedans_arc(accessibles, i, tmp))
-				{
-					accessibles[i] = tmp;
-					i++;
-				}
-
-				tmp = tmp->arc_suivant;
-			}
-			j++;
-			p = accessibles[j]->noeud;
-		}
-		if (i == taille - 1)
-		{
-			return 1;
-		}
+	if (deg_imp == 2 || deg_imp == 0)
+		return 1;
+	else
 		return 0;
-	}
-	else
-	{
-		h = g;
-		p = h;
-		accessibles[0] = p->liste_arcs;
-		i = 1;
-		while (p != NULL)
-		{
-			while (p != NULL && j <= i)
-			{
-				tmp = p->liste_arcs;
-				while (tmp != NULL)
-				{
-
-					if (!check_dedans_arc(accessibles, i, tmp))
-					{
-						accessibles[i] = tmp;
-						i++;
-					}
-
-					tmp = tmp->arc_suivant;
-				}
-				j++;
-				p = accessibles[j]->noeud;
-			}
-			if (i == taille - 1)
-			{
-				return 1;
-			}
-
-			for (i = 0; i < taille; i++)
-			{
-				accessibles[i] = NULL;
-			}
-			h = h->noeud_suivant;
-			p = h;
-			i = 0;
-			accessibles[i] = p->liste_arcs;
-		}
-	}
-
-	return 0;*/
-	int flag = 0;
-
-	if (a == 1)
-	{
-		p = isole;
-		isole->precedent_chemin = NULL;
-		while (p != NULL && flag != 1)
-		{
-			p->visite = 1;
-			tmp = p->liste_arcs;
-			while (tmp != NULL && tmp->visite != 0)
-			{
-				tmp = tmp->arc_suivant;
-			}
-			if (tmp == NULL)
-			{
-				pnoeud_t test = g;
-				parc_t ta;
-				flag = 1;
-				while (test != NULL)
-				{
-					ta = test->liste_arcs;
-					while (ta != NULL)
-					{
-						if (ta->visite == 0)
-						{
-							flag = 0;
-						}
-						ta = ta->arc_suivant;
-					}
-					test = test->noeud_suivant;
-				}
-				p->visite = 0;
-				tmp = p->liste_arcs;
-				while (tmp != NULL)
-				{
-					tmp->visite = 0;
-					tmp = tmp->arc_suivant;
-				}
-				p = p->precedent_chemin;
-			}
-			else
-			{
-				tmp->noeud->precedent_chemin = p;
-				p = tmp->noeud;
-				tmp->visite = 1;
-			}
-		}
-		return flag;
-	}
-	else
-	{
-		pnoeud_t h = g;
-		p = h;
-		while (p != NULL)
-		{
-			p->precedent_chemin = NULL;
-			while (p != NULL && flag != 1)
-			{
-				p->visite = 1;
-				tmp = p->liste_arcs;
-				while (tmp != NULL && tmp->visite != 0)
-				{
-					tmp = tmp->arc_suivant;
-				}
-				if (tmp == NULL)
-				{
-					pnoeud_t test = g;
-					parc_t ta;
-					flag = 1;
-					while (test != NULL)
-					{
-						ta = test->liste_arcs;
-						while (ta != NULL)
-						{
-							if (ta->visite == 0)
-							{
-								flag = 0;
-							}
-							ta = ta->arc_suivant;
-						}
-						test = test->noeud_suivant;
-					}
-					p->visite = 0;
-					tmp = p->liste_arcs;
-					while (tmp != NULL)
-					{
-						tmp->visite = 0;
-						tmp = tmp->arc_suivant;
-					}
-					p = p->precedent_chemin;
-				}
-				else
-				{
-					tmp->noeud->precedent_chemin = p;
-					p = tmp->noeud;
-					tmp->visite = 1;
-				}
-			}
-			if (flag == 1)
-			{
-				return 1;
-			}
-			p = g;
-			while (p != NULL)
-			{
-				p->visite = 0;
-				p = p->noeud_suivant;
-			}
-			h = h->noeud_suivant;
-			p = h;
-		}
-	}
-
-	return 1;
 }
 
 int graphe_hamiltonien(pgraphe_t g)
 {
+	pnoeud_t p = g;
+	int n = nombre_sommets(g);
+
+	while (p != NULL)
+	{
+		if (degre_entrant_noeud(g, p) < n / 2 || degre_sortant_noeud(g, p) < n / 2)
+		{
+			return 0;
+		}
+		p = p->noeud_suivant;
+	}
+
+	return 1;
+	/*
 	pnoeud_t p = g, isole;
-	//int taille = nombre_sommets(g);
-	//pnoeud_t accessibles[taille];
-	int a = 0; // i = 0, j = 0;
+	int a = 0; 
 	parc_t tmp;
 
 	if (independant(g))
@@ -959,75 +770,6 @@ int graphe_hamiltonien(pgraphe_t g)
 		p = p->noeud_suivant;
 	}
 
-	/*if (a == 1)
-	{
-		p = isole;
-		accessibles[i] = p;
-		i++;
-		//On ajoute chaque nouveau noeud dans le tableau, et quand c'est plein (i == taille -1) on est bon
-		while (p != NULL && j <= i)
-		{
-
-			parc_t a = p->liste_arcs;
-			while (a != NULL)
-			{
-
-				if (!check_dedans(accessibles, i, a->noeud))
-				{
-					accessibles[i] = a->noeud;
-					i++;
-				}
-
-				a = a->arc_suivant;
-			}
-			j++;
-			p = accessibles[j];
-		}
-		if (i == taille - 1)
-		{
-			return 1;
-		}
-		return 0;
-	}
-	else
-	{
-		p = g;
-
-		while (p != NULL)
-		{
-
-			while (p != NULL && j <= i)
-			{
-				p = accessibles[j];
-				parc_t a = p->liste_arcs;
-				while (a != NULL)
-				{
-
-					if (!check_dedans(accessibles, i, a->noeud))
-					{
-						accessibles[i] = a->noeud;
-						i++;
-					}
-
-					a = a->arc_suivant;
-				}
-				j++;
-			}
-			if (i == taille - 1)
-			{
-				return 1;
-			}
-
-			for (i = 0; i < taille; i++)
-			{
-				accessibles[i] = NULL;
-			}
-			p = p->noeud_suivant;
-			i = 0;
-			accessibles[i] = p;
-		}
-		return O;
-	}*/
 	int flag = 0;
 
 	if (a == 1)
@@ -1130,7 +872,7 @@ int graphe_hamiltonien(pgraphe_t g)
 		}
 	}
 
-	return 1;
+	return 1;*/
 }
 
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
