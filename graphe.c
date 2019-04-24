@@ -422,7 +422,7 @@ void afficher_graphe_largeur(pgraphe_t g)
 				while (a != NULL)
 				{
 					if (a->noeud->visite == 0)
-					{	
+					{
 						i = deposer_file(f, a->noeud);
 					}
 					a = a->arc_suivant;
@@ -455,7 +455,7 @@ pnoeud_t trouve_min(pgraphe_t g)
 	int min = 100;
 	pnoeud_t tmp = NULL;
 	pnoeud_t p = g;
-	
+
 	while (p != NULL)
 	{
 		if (p->poid < min)
@@ -557,21 +557,22 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 
 int elementaire(pgraphe_t g, chemin_t c)
 {
-	int taille = c.nb_noeuds;
-	int tab[taille];
 
-	for (int i = 0; i < taille; i++)
+	pnoeud_t p = g;
+
+	while (p != NULL)
 	{
-		tab[i] = 0;
+		p->visite = 0;
 	}
 
 	for (int i = 0; i < c.nb_noeuds; i++)
 	{
-		if (tab[c.labels[i]] == 1)
+		p = chercher_noeud(g, c.labels[i]);
+		if (p->visite == 1)
 		{
 			return 0;
 		}
-		tab[c.labels[i]] = 1;
+		p->visite = 1;
 	}
 
 	return 1;
