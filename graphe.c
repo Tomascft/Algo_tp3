@@ -760,14 +760,21 @@ int graphe_eurelien(pgraphe_t g)
 	pnoeud_t p = g;
 	while (p != NULL)
 	{
-		if (degree_noeud(g,p) % 2 != 0)
+	/*	if (degree_noeud(g,p) % 2 != 0)
 			deg_imp++;
+		p = p->noeud_suivant;*/
+		if(degre_entrant_noeud(g,p) != degre_sortant_noeud(g,p))
+		{
+			return 0;
+		}
 		p = p->noeud_suivant;
 	}
+	return 1;
+	/*
 	if (deg_imp == 2 || deg_imp == 0)
 		return 1;
 	else
-		return 0;
+		return 0;*/
 }
 
 int graphe_hamiltonien(pgraphe_t g)
