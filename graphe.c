@@ -529,9 +529,6 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 	}
 
 	i = 0;
-
-	ecrire_poids(g);
-
 	p = chercher_noeud(g, destination);
 	while (p != NULL && p->label != origine)
 	{
@@ -555,7 +552,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 	for (i = *nb_noeuds - 1; i >= 0; i--)
 	{
 		chemin[j] = tab[i];
-		printf("%d\n", tab[i]);
+		//printf("%d\n", tab[i]);
 		j++;
 	}
 	return 1;
