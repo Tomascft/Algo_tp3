@@ -288,7 +288,7 @@ int independant(pgraphe_t g)
 			return 0;
 		if (tmp == 2 && p->label != p->liste_arcs->noeud->label)
 		{
-				return 0;
+			return 0;
 		}
 		p = p->noeud_suivant;
 	}
@@ -447,19 +447,21 @@ void init(pgraphe_t g, int origine)
 		{
 			p->poid = 0;
 		}
+		p->visite = 0;
 		p = p->noeud_suivant;
 	}
 }
 
 pnoeud_t trouve_min(pgraphe_t g)
 {
-	int min = 99;
+	int min = 100;
 	pnoeud_t tmp = NULL;
 	pnoeud_t p = g;
 
 	while (p != NULL)
 	{
-		if (p->poid < min)
+
+		if (p->poid < min && p->visite == 0)
 		{
 			min = p->poid;
 			tmp = p;
@@ -468,24 +470,10 @@ pnoeud_t trouve_min(pgraphe_t g)
 	}
 	return tmp;
 }
-void supprimer_noued(pgraphe_t g, pnoeud_t tmp)
+void supprimer_noued(pnoeud_t g, pnoeud_t tmp)
 {
 	pnoeud_t p = g;
-	if (tmp != NULL)
-	{
-		if (p == tmp)
-		{
-			g = g->noeud_suivant;
-		}
-		else
-		{
-			while (p->noeud_suivant != tmp)
-			{
-				p = p->noeud_suivant;
-			}
-			p->noeud_suivant = tmp->noeud_suivant;
-		}
-	}
+	tmp->visite = 1;
 }
 
 void maj_distances(parc_t a, pnoeud_t s2)
@@ -494,6 +482,17 @@ void maj_distances(parc_t a, pnoeud_t s2)
 	{
 		a->noeud->poid = s2->poid + a->poids;
 		a->noeud->precedent_chemin = s2;
+	}
+}
+
+void ecrire_poids(pgraphe_t g)
+{
+	pnoeud_t p = g;
+
+	while(p != NULL)
+	{
+		printf("poids : %d visite : %d\n",p->poid,p->visite);
+		p = p->noeud_suivant;
 	}
 }
 
@@ -507,7 +506,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
      nb_noeuds indique le nombre de noeuds du chemin
   */
 	pnoeud_t p = g;
-	pnoeud_t tmp = NULL;
+	pnoeud_t tmp = p;
 	parc_t a;
 
 	int taille = nombre_sommets(g);
@@ -516,19 +515,25 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 
 	init(p, origine);
 
-	while (p != NULL)
+	while (tmp != NULL)
 	{
 		tmp = trouve_min(p);
-		supprimer_noued(p, tmp);
-		a = tmp->liste_arcs;
-		while (a != NULL)
+		if (tmp != NULL)
 		{
-			maj_distances(a, tmp);
-			a = a->arc_suivant;
+			supprimer_noued(p, tmp);
+			a = tmp->liste_arcs;
+			while (a != NULL)
+			{
+				maj_distances(a, tmp);
+				a = a->arc_suivant;
+			}
 		}
 	}
 
 	i = 0;
+
+	ecrire_poids(g);
+
 	p = chercher_noeud(g, destination);
 	while (p != NULL && p->label != origine)
 	{
@@ -545,12 +550,14 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 		return 0;
 	}
 	tab[i] = origine;
-
+	
 	*nb_noeuds = i + 1;
 	int j = 0;
+	chemin = (int*) malloc(sizeof(int) * (i+1));
 	for (i = *nb_noeuds - 1; i >= 0; i--)
 	{
 		chemin[j] = tab[i];
+		printf("%d\n", tab[i]);
 		j++;
 	}
 	return 1;
@@ -715,55 +722,61 @@ int check_dedans_arc(parc_t *tab, int taille, parc_t p)
 	return 0;
 }
 
-
-int graphe_connexe(pgraphe_t g){
+int graphe_connexe(pgraphe_t g)
+{
 	afficher_graphe_profondeur(g);
-	pnoeud_t p=g;
-	while(p!=NULL){
-		if(p->visite==0)
+	pnoeud_t p = g;
+	while (p != NULL)
+	{
+		if (p->visite == 0)
 			return 0;
-		p=p->noeud_suivant;
+		p = p->noeud_suivant;
 	}
 	return 1;
 }
 
-int degree_noeud(pgraphe_t g, pnoeud_t n){
-	int degree=0;
-	parc_t a=n->liste_arcs;
-	while(a!=NULL){
-		pnoeud_t p=g;
-		while(p!=NULL){
-			if(p->label==a->noeud->label){
-				parc_t tmp1= p->liste_arcs;
-				while(tmp1!=NULL){
-					if(tmp1->noeud->label==n->label){
+int degree_noeud(pgraphe_t g, pnoeud_t n)
+{
+	int degree = 0;
+	parc_t a = n->liste_arcs;
+	while (a != NULL)
+	{
+		pnoeud_t p = g;
+		while (p != NULL)
+		{
+			if (p->label == a->noeud->label)
+			{
+				parc_t tmp1 = p->liste_arcs;
+				while (tmp1 != NULL)
+				{
+					if (tmp1->noeud->label == n->label)
+					{
 						degree++;
 						break;
 					}
-					tmp1=tmp1->arc_suivant;
+					tmp1 = tmp1->arc_suivant;
 				}
 				break;
 			}
-			p=p->noeud_suivant;
+			p = p->noeud_suivant;
 		}
-		a=a->arc_suivant;
+		a = a->arc_suivant;
 	}
 	return degree;
 }
 
-
 int graphe_eurelien(pgraphe_t g)
 {
-	if(!graphe_connexe(g))
+	if (!graphe_connexe(g))
 		return 0;
 	int deg_imp = 0; //degré impair
 	pnoeud_t p = g;
 	while (p != NULL)
 	{
-	/*	if (degree_noeud(g,p) % 2 != 0)
+		/*	if (degree_noeud(g,p) % 2 != 0)
 			deg_imp++;
 		p = p->noeud_suivant;*/
-		if(degre_entrant_noeud(g,p) != degre_sortant_noeud(g,p))
+		if (degre_entrant_noeud(g, p) != degre_sortant_noeud(g, p))
 		{
 			return 0;
 		}
@@ -779,14 +792,14 @@ int graphe_eurelien(pgraphe_t g)
 
 int graphe_hamiltonien(pgraphe_t g)
 {
-	if(!graphe_connexe(g))
+	if (!graphe_connexe(g))
 		return 0;
 	pnoeud_t p = g;
 	int n = nombre_sommets(g);
 
 	while (p != NULL)
 	{
-		if (degree_noeud(g,p) < n / 2)
+		if (degree_noeud(g, p) < n / 2)
 		{
 			return 0;
 		}
@@ -927,25 +940,25 @@ int graphe_hamiltonien(pgraphe_t g)
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
 {
 	pnoeud_t p = g;
-	pnoeud_t tmp = NULL;
+	pnoeud_t tmp = p;
 	parc_t a;
 
-	init(g, x->label);
+	init(p, x->label);
 
-	while (p != NULL)
+	while (tmp != NULL)
 	{
-		tmp = trouve_min(g);
-		supprimer_noued(g, tmp);
-		a = tmp->liste_arcs;
-		while (a != NULL)
+		tmp = trouve_min(p);
+		if (tmp != NULL)
 		{
-			maj_distances(a, tmp);
-			a = a->arc_suivant;
+			supprimer_noued(p, tmp);
+			a = tmp->liste_arcs;
+			while (a != NULL)
+			{
+				maj_distances(a, tmp);
+				a = a->arc_suivant;
+			}
 		}
-
-		p = p->noeud_suivant;
 	}
-
 	return y->poid;
 }
 
