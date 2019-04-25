@@ -56,6 +56,8 @@ typedef pchemin_t pdeb_chemin_t;
   DEFINIR LE TYPE chemin_t (examen 2017)
 */
 
+pnoeud_t chercher_noeud(pgraphe_t g, int label);
+
 void lire_graphe(char *file_name, pgraphe_t *g);
 
 void ecrire_graphe(pnoeud_t p);

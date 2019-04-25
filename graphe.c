@@ -412,6 +412,9 @@ void afficher_graphe_largeur(pgraphe_t g)
 		pfile_t f = creer_file();
 		int i;
 		i = deposer_file(f, p);
+		if (i == 1)
+		{
+		}
 		while (!file_vide(f))
 		{
 			pnoeud_t tmp = retirer_file(f);
@@ -470,11 +473,6 @@ pnoeud_t trouve_min(pgraphe_t g)
 	}
 	return tmp;
 }
-void supprimer_noued(pnoeud_t g, pnoeud_t tmp)
-{
-	pnoeud_t p = g;
-	tmp->visite = 1;
-}
 
 void maj_distances(parc_t a, pnoeud_t s2)
 {
@@ -489,14 +487,14 @@ void ecrire_poids(pgraphe_t g)
 {
 	pnoeud_t p = g;
 
-	while(p != NULL)
+	while (p != NULL)
 	{
-		printf("poids : %d visite : %d\n",p->poid,p->visite);
+		printf("poids : %d visite : %d\n", p->poid, p->visite);
 		p = p->noeud_suivant;
 	}
 }
 
-int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //A FAIRE
+int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 											int *nb_noeuds)
 {
 	/* 
@@ -520,7 +518,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 		tmp = trouve_min(p);
 		if (tmp != NULL)
 		{
-			supprimer_noued(p, tmp);
+			tmp->visite = 1;
 			a = tmp->liste_arcs;
 			while (a != NULL)
 			{
@@ -550,10 +548,10 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin, //
 		return 0;
 	}
 	tab[i] = origine;
-	
+
 	*nb_noeuds = i + 1;
 	int j = 0;
-	chemin = (int*) malloc(sizeof(int) * (i+1));
+	chemin = (int *)malloc(sizeof(int) * (i + 1));
 	for (i = *nb_noeuds - 1; i >= 0; i--)
 	{
 		chemin[j] = tab[i];
@@ -571,6 +569,7 @@ int elementaire(pgraphe_t g, chemin_t c)
 	while (p != NULL)
 	{
 		p->visite = 0;
+		p = p->noeud_suivant;
 	}
 
 	for (int i = 0; i < c.nb_noeuds; i++)
@@ -769,7 +768,7 @@ int graphe_eurelien(pgraphe_t g)
 {
 	if (!graphe_connexe(g))
 		return 0;
-	int deg_imp = 0; //degré impair
+	//int deg_imp = 0; //degré impair
 	pnoeud_t p = g;
 	while (p != NULL)
 	{
@@ -950,7 +949,7 @@ int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
 		tmp = trouve_min(p);
 		if (tmp != NULL)
 		{
-			supprimer_noued(p, tmp);
+			tmp->visite = 1;
 			a = tmp->liste_arcs;
 			while (a != NULL)
 			{
