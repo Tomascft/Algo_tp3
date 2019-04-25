@@ -551,7 +551,7 @@ int plus_court_chemin(pgraphe_t g, int origine, int destination, int *chemin,
 
 	*nb_noeuds = i + 1;
 	int j = 0;
-	chemin = (int *)malloc(sizeof(int) * (i + 1));
+	//chemin = (int *)malloc(sizeof(int) * (i + 1));
 	for (i = *nb_noeuds - 1; i >= 0; i--)
 	{
 		chemin[j] = tab[i];

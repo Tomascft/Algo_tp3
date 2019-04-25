@@ -43,18 +43,20 @@ int main(int argc, char **argv)
   //afficher_graphe_largeur(g);
   //printf("graphe complet: %d\n",complet(g));
 
-  /*plus_court_chemin(g,1,5,chemin,nb_noeud);
+  chemin = (int *)malloc(sizeof(int) * 99); // On fait le malloc la parcequ'on arrive pas a le faire marcher dans la fonction.
 
-  printf("nb noeuds : %d\n",*nb_noeud);
- 
-  for(int i = 0; i < *nb_noeud; i++)
+  plus_court_chemin(g, 1, 5, chemin, nb_noeud);
+
+  printf("nb noeuds : %d\n", *nb_noeud);
+
+  for (int i = 0; i < *nb_noeud; i++)
   {
-    printf("%d\n",chemin[i]);
-  }*/
+    printf("%d\n", chemin[i]);
+  }
 
   //printf("distance : %d\n",distance(g,p1,p2));
 
-/*
+  /*
   c = (pchemin_t) malloc(sizeof(chemin_t));
 
   c->nb_noeuds = (int) malloc(sizeof(int));
@@ -73,6 +75,7 @@ int main(int argc, char **argv)
 
   printf("hamiltonien = %d\n", hamiltonien(g, *c));*/
 
+  /*
   printf("graphe eulerien = %d\n", graphe_eurelien(g));
 
   printf("graphe hamiltonien = %d\n", graphe_hamiltonien(g));
@@ -80,6 +83,7 @@ int main(int argc, char **argv)
   printf("excentricite = %d\n", excentricite(g, p1));
 
   printf("diametre = %d\n", diametre(g));
+  */
 
   return 0;
 }
