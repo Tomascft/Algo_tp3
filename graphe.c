@@ -718,7 +718,7 @@ int check_dedans_arc(parc_t *tab, int taille, parc_t p)
 	return 0;
 }
 
-int graphe_connexe(pgraphe_t g)
+int graphe_connexe(pgraphe_t g) //vérifier si le graphe est fortement connexe
 {
 	afficher_graphe_profondeur(g);
 	pnoeud_t p = g;
@@ -731,47 +731,15 @@ int graphe_connexe(pgraphe_t g)
 	return 1;
 }
 
-int degree_noeud(pgraphe_t g, pnoeud_t n)
-{
-	int degree = 0;
-	parc_t a = n->liste_arcs;
-	while (a != NULL)
-	{
-		pnoeud_t p = g;
-		while (p != NULL)
-		{
-			if (p->label == a->noeud->label)
-			{
-				parc_t tmp1 = p->liste_arcs;
-				while (tmp1 != NULL)
-				{
-					if (tmp1->noeud->label == n->label)
-					{
-						degree++;
-						break;
-					}
-					tmp1 = tmp1->arc_suivant;
-				}
-				break;
-			}
-			p = p->noeud_suivant;
-		}
-		a = a->arc_suivant;
-	}
-	return degree;
-}
 
-int graphe_eurelien(pgraphe_t g)
+
+int graphe_eurelien(pgraphe_t g)  //théorème d’Euler.
 {
 	if (!graphe_connexe(g))
 		return 0;
-	//int deg_imp = 0; //degré impair
 	pnoeud_t p = g;
 	while (p != NULL)
 	{
-		/*	if (degree_noeud(g,p) % 2 != 0)
-			deg_imp++;
-		p = p->noeud_suivant;*/
 		if (degre_entrant_noeud(g, p) != degre_sortant_noeud(g, p))
 		{
 			return 0;
@@ -779,14 +747,9 @@ int graphe_eurelien(pgraphe_t g)
 		p = p->noeud_suivant;
 	}
 	return 1;
-	/*
-	if (deg_imp == 2 || deg_imp == 0)
-		return 1;
-	else
-		return 0;*/
 }
 
-int graphe_hamiltonien(pgraphe_t g)
+int graphe_hamiltonien(pgraphe_t g) // théorème de Alain Ghouila-Houri 
 {
 	if (!graphe_connexe(g))
 		return 0;
@@ -795,7 +758,7 @@ int graphe_hamiltonien(pgraphe_t g)
 
 	while (p != NULL)
 	{
-		if (degree_noeud(g, p) < n / 2)
+		if (degre_entrant_noeud(g,p) < n/2 || degre_sortant_noeud(g,p) < n/2)
 		{
 			return 0;
 		}
@@ -803,134 +766,6 @@ int graphe_hamiltonien(pgraphe_t g)
 	}
 
 	return 1;
-	/*
-	pnoeud_t p = g, isole;
-	int a = 0; 
-	parc_t tmp;
-
-	if (independant(g))
-	{
-		return 0;
-	}
-
-	while (p != NULL)
-	{
-		if (degre_entrant_noeud(g, p) == 0)
-		{
-			a++;
-			isole = p;
-		}
-		if (a == 2) //Si il y a 2 noeuds non accesibles alors il ne peut pas y avoir de chemin hamiltonien
-		{
-			return 0;
-		}
-
-		p = p->noeud_suivant;
-	}
-
-	int flag = 0;
-
-	if (a == 1)
-	{
-		p = isole;
-		isole->precedent_chemin = NULL;
-		while (p != NULL && flag != 1)
-		{
-			p->visite = 1;
-			tmp = p->liste_arcs;
-			while (tmp != NULL && tmp->visite != 0)
-			{
-				tmp = tmp->arc_suivant;
-			}
-			if (tmp == NULL)
-			{
-				pnoeud_t test = g;
-				flag = 1;
-				while (test != NULL)
-				{
-					if (test->visite == 0)
-					{
-						flag = 0;
-					}
-					test = test->noeud_suivant;
-				}
-				p->visite = 0;
-				tmp = p->liste_arcs;
-				while (tmp != NULL)
-				{
-					tmp->visite = 0;
-					tmp = tmp->arc_suivant;
-				}
-				p = p->precedent_chemin;
-			}
-			else
-			{
-				tmp->noeud->precedent_chemin = p;
-				p = tmp->noeud;
-				tmp->visite = 1;
-			}
-		}
-		return flag;
-	}
-	else
-	{
-		pnoeud_t h = g;
-		p = h;
-		while (p != NULL)
-		{
-			p->precedent_chemin = NULL;
-			while (p != NULL && flag != 1)
-			{
-				p->visite = 1;
-				tmp = p->liste_arcs;
-				while (tmp != NULL && tmp->visite != 0)
-				{
-					tmp = tmp->arc_suivant;
-				}
-				if (tmp == NULL)
-				{
-					pnoeud_t test = g;
-					flag = 1;
-					while (test != NULL)
-					{
-						if (test->visite == 0)
-						{
-							flag = 0;
-						}
-						test = test->noeud_suivant;
-					}
-					p->visite = 0;
-					tmp = p->liste_arcs;
-					while (tmp != NULL)
-					{
-						tmp->visite = 0;
-						tmp = tmp->arc_suivant;
-					}
-					p = p->precedent_chemin;
-				}
-				else
-				{
-					tmp->noeud->precedent_chemin = p;
-					p = tmp->noeud;
-					tmp->visite = 1;
-				}
-			}
-			if (flag == 1)
-			{
-				return 1;
-			}
-			p = g;
-			while (p != NULL)
-			{
-				p->visite = 0;
-				p = p->noeud_suivant;
-			}
-			h = h->noeud_suivant;
-			p = h;
-		}
-	}
-
-	return 1;*/
 }
 
 int distance(pgraphe_t g, pnoeud_t x, pnoeud_t y)
